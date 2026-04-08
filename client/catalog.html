@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/assistant.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <h1>Linomello</h1>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">Главная</a>
+                    <a href="catalog.html" class="nav-link active">Каталог</a>
+                    <a href="collections.html" class="nav-link">Коллекции</a>
+                    <a href="about.html" class="nav-link">О нас</a>
+                    <a href="contacts.html" class="nav-link">Контакты</a>
+                </nav>
+                <div class="header-actions">
+                    <button class="search-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M21 21L16.514 16.506L21 21ZM19 10.5C19 15.194 15.194 19 10.5 19C5.806 19 2 15.194 2 10.5C2 5.806 5.806 2 10.5 2C15.194 2 19 5.806 19 10.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <a href="login.html" class="auth-link">Войти</a>
+                    <a href="cart.html" class="cart-link">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.4 5.2 16.4H17M17 13V16.4M9 19C9 19.6 8.6 20 8 20C7.4 20 7 19.6 7 19C7 18.4 7.4 18 8 18C8.6 18 9 18.4 9 19ZM17 19C17 19.6 16.6 20 16 20C15.4 20 15 19.6 15 19C15 18.4 15.4 18 16 18C16.6 18 17 18.4 17 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span class="cart-count">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1>Каталог мебели</h1>
+        </div>
+    </section>
+    <section class="catalog">
+        <div class="container">
+            <div class="catalog-layout">
+                <aside class="filters-sidebar">
+                    <div class="filter-group">
+                        <h3>Категории</h3>
+                        <div class="filter-options">
+                            <label class="filter-option">
+                                <input type="checkbox" name="category" value="Диваны">
+                                <span>Диваны</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="category" value="Кресла">
+                                <span>Кресла</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="category" value="Столы">
+                                <span>Столы</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="category" value="Стулья">
+                                <span>Стулья</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="category" value="Кровати">
+                                <span>Кровати</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="category" value="Шкафы">
+                                <span>Шкафы</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <h3>Коллекции</h3>
+                        <div class="filter-options">
+                            <label class="filter-option">
+                                <input type="checkbox" name="collection" value="Милан">
+                                <span>Милан</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="collection" value="Флоренция">
+                                <span>Флоренция</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="collection" value="Венеция">
+                                <span>Венеция</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="collection" value="Неаполь">
+                                <span>Неаполь</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <h3>Цена</h3>
+                        <div class="price-range">
+                            <div class="price-inputs">
+                                <input type="number" id="minPrice" placeholder="0" min="0">
+                                <span>-</span>
+                                <input type="number" id="maxPrice" placeholder="1000000" min="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <h3>Материалы</h3>
+                        <div class="filter-options">
+                            <label class="filter-option">
+                                <input type="checkbox" name="material" value="Натуральная кожа">
+                                <span>Натуральная кожа</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="material" value="Массив дерева">
+                                <span>Массив дерева</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="material" value="Мрамор">
+                                <span>Мрамор</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="material" value="Бархат">
+                                <span>Бархат</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="material" value="Шелк">
+                                <span>Шелк</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary apply-filters">Применить фильтры</button>
+                    <button class="btn btn-secondary reset-filters">Сбросить</button>
+                </aside>
+
+                <main class="products-main">
+                    <div class="catalog-controls">
+                        <div class="search-box">
+                            <input type="text" id="searchInput" placeholder="Поиск по каталогу...">
+                            <button class="btn btn-primary">Найти</button>
+                        </div>
+                        <div class="sort-options">
+                            <select id="sortSelect">
+                                <option value="newest">Сначала новые</option>
+                                <option value="price_asc">По цене (возр.)</option>
+                                <option value="price_desc">По цене (убыв.)</option>
+                                <option value="name">По названию</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="products-count">
+                        Найдено: <span id="productsCount">12</span> товаров
+                    </div>
+
+                    <div class="products-grid catalog-grid" id="catalogProducts">
+
+                    </div>
+
+                    <div class="pagination">
+                        <button class="pagination-btn prev" disabled>← Назад</button>
+                        <div class="pagination-pages">
+                            <button class="pagination-page active">1</button>
+                            <button class="pagination-page">2</button>
+                            <button class="pagination-page">3</button>
+                        </div>
+                        <button class="pagination-btn next">Вперед →</button>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Linomello</h3>
+                    <p>Создаем элитную мебель с 2010 года. Индивидуальный подход, премиальные материалы, вечное качество.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Контакты</h4>
+                    <p>Москва, ул. Пречистенка, 15</p>
+                    <p>+7 (495) 123-45-67</p>
+                    <p>info@linomello.ru</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Часы работы</h4>
+                    <p>Пн-Пт: 10:00-20:00</p>
+                    <p>Сб-Вс: 11:00-18:00</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Подписка</h4>
+                    <p>Будьте в курсе новых коллекций</p>
+                    <div class="subscribe-form">
+                        <input type="email" placeholder="Ваш email">
+                        <button class="btn btn-primary">Подписаться</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+<script src="js/assistant.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/catalog.js"></script>
+    <script src="js/mobile.js"></script>
+    <script src="js/assistant-new.js"></script>
+</body>
+</html>
+
+

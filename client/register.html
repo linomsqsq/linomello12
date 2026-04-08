@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/assistant.css">
+</head>
+<body class="auth-page">
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <h1>Linomello</h1>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">Главная</a>
+                    <a href="catalog.html" class="nav-link">Каталог</a>
+                    <a href="collections.html" class="nav-link">Коллекции</a>
+                    <a href="about.html" class="nav-link">О нас</a>
+                    <a href="contacts.html" class="nav-link">Контакты</a>
+                </nav>
+                <div class="header-actions">
+                    <a href="login.html" class="auth-link">Войти</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <section class="auth-section">
+        <div class="container">
+            <div class="auth-layout">
+                <div class="auth-form-container">
+                    <div class="auth-header">
+                        <h1>Создать аккаунт</h1>
+                        <p>Присоединяйтесь к сообществу Linomello</p>
+                    </div>
+
+                    <form class="auth-form" id="registerForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">Имя</label>
+                                <input type="text" id="firstName" name="firstName" required placeholder="Ваше имя">
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Фамилия</label>
+                                <input type="text" id="lastName" name="lastName" required placeholder="Ваша фамилия">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required placeholder="your@email.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Телефон</label>
+                            <input type="tel" id="phone" name="phone" placeholder="+7 (999) 123-45-67">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Пароль</label>
+                            <input type="password" id="password" name="password" required placeholder="Не менее 6 символов">
+                            <div class="password-strength">
+                                <div class="strength-bar">
+                                    <div class="strength-fill" data-strength="0"></div>
+                                </div>
+                                <span class="strength-text">Слабый пароль</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmPassword">Подтвердите пароль</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Повторите пароль">
+                        </div>
+
+                        <div class="form-options">
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="agreement" required>
+                                <span class="checkmark"></span>
+                                Я соглашаюсь с <a href="terms.html">условиями использования</a> и <a href="privacy.html">политикой конфиденциальности</a>
+                            </label>
+                        </div>
+
+                        <div class="form-options">
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="newsletter">
+                                <span class="checkmark"></span>
+                                Получать новости и специальные предложения
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-auth">
+                            <span class="btn-text">Создать аккаунт</span>
+                            <span class="btn-loading" style="display: none;">Регистрация...</span>
+                        </button>
+
+                        <div class="auth-divider">
+                            <span>или зарегистрируйтесь через</span>
+                        </div>
+
+                        <div class="social-auth">
+                            <button type="button" class="btn btn-social btn-google">
+                                <span class="social-icon">🔍</span>
+                                Google
+                            </button>
+                            <button type="button" class="btn btn-social btn-yandex">
+                                <span class="social-icon">Я</span>
+                                Yandex
+                            </button>
+                        </div>
+
+                        <div class="auth-footer">
+                            <p>Уже есть аккаунт? <a href="login.html">Войти</a></p>
+                        </div>
+                    </form>
+                </div>
+                <div class="auth-benefits">
+                    <div class="benefits-content">
+                        <h2>Станьте частью Linomello</h2>
+                        <div class="benefits-list">
+                            <div class="benefit-item">
+                                <div class="benefit-icon">🎨</div>
+                                <div class="benefit-text">
+                                    <h3>Индивидуальный дизайн</h3>
+                                    <p>Получите доступ к услугам персонального дизайнера</p>
+                                </div>
+                            </div>
+                            <div class="benefit-item">
+                                <div class="benefit-icon">⭐</div>
+                                <div class="benefit-text">
+                                    <h3>VIP-статус</h3>
+                                    <p>Привилегии для постоянных клиентов</p>
+                                </div>
+                            </div>
+                            <div class="benefit-item">
+                                <div class="benefit-icon">📐</div>
+                                <div class="benefit-text">
+                                    <h3>3D-визуализация</h3>
+                                    <p>Бесплатная 3D-визуализация вашего интерьера</p>
+                                </div>
+                            </div>
+                            <div class="benefit-item">
+                                <div class="benefit-icon">🚚</div>
+                                <div class="benefit-text">
+                                    <h3>Приоритетная доставка</h3>
+                                    <p>Ускоренная доставка для зарегистрированных клиентов</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="registration-stats">
+                            <h4>Нас уже выбирают</h4>
+                            <div class="stats-grid">
+                                <div class="stat">
+                                    <div class="stat-number">2,500+</div>
+                                    <div class="stat-label">Довольных клиентов</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-number">5,000+</div>
+                                    <div class="stat-label">Реализованных проектов</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-number">14</div>
+                                    <div class="stat-label">Лет на рынке</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Linomello</h3>
+                    <p>Создаем элитную мебель с 2010 года. Индивидуальный подход, премиальные материалы, вечное качество.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Контакты</h4>
+                    <p>Москва, ул. Пречистенка, 15</p>
+                    <p>+7 (495) 123-45-67</p>
+                    <p>info@linomello.ru</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Часы работы</h4>
+                    <p>Пн-Пт: 10:00-20:00</p>
+                    <p>Сб-Вс: 11:00-18:00</p>
+                </div>
+            </div>
+            
+        </div>
+    </footer>
+<script src="js/assistant.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/register.js"></script>
+    <script src="js/mobile.js"></script>
+</body>
+</html>
+
+

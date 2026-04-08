@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход администратора</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .admin-login-container {
+            width: 100%;
+            max-width: 420px;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .admin-login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .admin-login-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .admin-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(139, 115, 85, 0.1);
+            border: 1px solid var(--secondary-color);
+            border-radius: 25px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--secondary-color);
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .admin-login-header p {
+            color: var(--text-light);
+            font-size: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(139, 115, 85, 0.1);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .btn-login:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-login:disabled {
+            background: var(--text-light);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 14px;
+            border: 1px solid #f5c6cb;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 14px;
+            border: 1px solid #c3e6cb;
+        }
+
+        .demo-credentials {
+            background: var(--background-light);
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary-color);
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .demo-credentials h4 {
+            margin: 0 0 10px;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .demo-credentials p {
+            margin: 6px 0;
+            color: var(--text-light);
+        }
+
+        .demo-credentials code {
+            background: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Courier', monospace;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: var(--text-light);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border-color);
+            border-top-color: var(--secondary-color);
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .back-to-main {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-to-main a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .back-to-main a:hover {
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-login-container">
+        <div class="admin-login-header">
+            <span class="admin-badge">🔐 Администратор</span>
+            <h1>Админ-панель</h1>
+            <p>Вход для управления сайтом</p>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+        <div class="success-message" id="successMessage"></div>
+
+        <form id="adminLoginForm">
+            <div class="form-group">
+                <label for="email">Email администратора</label>
+                <input type="email" id="email" name="email" placeholder="admin@linomello.ru" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Пароль</label>
+                <input type="password" id="password" name="password" placeholder="Введите пароль" required>
+            </div>
+
+            <button type="submit" class="btn-login" id="submitBtn">
+                <span class="btn-text">Войти в админ-панель</span>
+                <span class="loading" id="loadingIndicator">
+                    <span class="spinner"></span> Проверка...
+                </span>
+            </button>
+        </form>
+
+        <div class="demo-credentials">
+            <h4>📋 Тестовые учетные данные:</h4>
+            <p><strong>Email:</strong> <code>admin@linomello.ru</code></p>
+            <p><strong>Пароль:</strong> <code>admin123</code></p>
+            <p style="margin-top: 12px; color: #999; font-size: 12px;">💡 Измените пароль после первого входа</p>
+        </div>
+
+        <div class="back-to-main">
+            <a href="index.html">← Вернуться на главную</a>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        const form = document.getElementById('adminLoginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const submitBtn = document.getElementById('submitBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const btnText = document.querySelector('.btn-text');
+
+        // Ждем инициализации authManager
+        document.addEventListener('DOMContentLoaded', () => {
+            // Если уже авторизован как админ
+            setTimeout(() => {
+                if (window.authManager && authManager.isAdmin()) {
+                    window.location.href = 'admin.html';
+                }
+            }, 500);
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await handleLogin();
+        });
+
+        async function handleLogin() {
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            if (!email || !password) {
+                showError('Заполните все поля');
+                return;
+            }
+
+            if (!email.includes('@')) {
+                showError('Введите корректный email');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            btnText.style.display = 'none';
+            loadingIndicator.style.display = 'block';
+
+            try {
+                console.log('🔓 Попытка входа:', email);
+                const result = await authManager.login(email, password);
+                console.log('📝 Результат логина:', result);
+                console.log('👤 Текущий пользователь:', authManager.currentUser);
+
+                if (result.success) {
+                    console.log('✅ Логин успешен');
+                    
+                    // Даем время на обновление isAdmin()
+                    setTimeout(() => {
+                        console.log('🔍 Проверка роли:', authManager.currentUser?.role);
+                        
+                        if (!authManager.isAdmin()) {
+                            showError('❌ Ошибка: этот аккаунт не имеет прав администратора. Убедитесь что используете аккаунт администратора.');
+                            authManager.logout();
+                            submitBtn.disabled = false;
+                            btnText.style.display = 'inline';
+                            loadingIndicator.style.display = 'none';
+                            console.log('❌ Недостаточно прав для входа');
+                            return;
+                        }
+
+                        console.log('🎯 Перенаправление в админ-панель');
+                        successMessage.textContent = '✅ Успешный вход! Перенаправляю...';
+                        successMessage.style.display = 'block';
+
+                        setTimeout(() => {
+                            window.location.href = 'admin.html';
+                        }, 1500);
+                    }, 300);
+                } else {
+                    console.error('❌ Ошибка при логине:', result.error);
+                    showError(result.error || '❌ Ошибка входа');
+                    submitBtn.disabled = false;
+                    btnText.style.display = 'inline';
+                    loadingIndicator.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('🔴 Ошибка соединения:', error);
+                showError('❌ Ошибка соединения с сервером: ' + error.message);
+                submitBtn.disabled = false;
+                btnText.style.display = 'inline';
+                loadingIndicator.style.display = 'none';
+            }
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
+
+
+

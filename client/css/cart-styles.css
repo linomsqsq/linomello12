@@ -1,0 +1,226 @@
+/* ---------- КОРЗИНА И ДОСТАВКА ---------- */
+
+.delivery-form {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    border: 1px solid var(--gray-border);
+}
+
+.delivery-form h4, .delivery-options h4, .payment-methods h4 {
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: var(--text);
+    font-weight: 600;
+}
+
+.delivery-form .form-group {
+    margin-bottom: 15px;
+}
+
+.delivery-form input[type="text"],
+.delivery-form input[type="tel"],
+.delivery-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--gray-border);
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+}
+
+.delivery-form input[type="text"]:focus,
+.delivery-form input[type="tel"]:focus,
+.delivery-form textarea:focus {
+    outline: none;
+    border-color: var(--teal);
+    background: #f0fffe;
+}
+
+.delivery-form textarea {
+    resize: vertical;
+}
+
+.delivery-options {
+    margin-bottom: 25px;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    border: 1px solid var(--gray-border);
+}
+
+.delivery-option {
+    display: flex;
+    align-items: flex-start;
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 2px solid var(--gray-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.delivery-option:hover {
+    border-color: var(--teal);
+    background: #f0fffe;
+}
+
+.delivery-option.selected {
+    border-color: var(--teal);
+    background: #e0f2f1;
+}
+
+.delivery-option input[type="radio"] {
+    margin-right: 15px;
+    margin-top: 2px;
+    cursor: pointer;
+}
+
+.delivery-option label {
+    flex: 1;
+    cursor: pointer;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.option-title {
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 5px;
+}
+
+.option-desc {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-bottom: 5px;
+}
+
+.option-price {
+    font-weight: 600;
+    color: var(--teal);
+}
+
+.payment-methods {
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    border: 1px solid var(--gray-border);
+}
+
+.payment-options {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+}
+
+.payment-option {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border: 2px solid var(--gray-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.payment-option:hover {
+    border-color: var(--teal);
+    background: #f0fffe;
+}
+
+.payment-option.selected {
+    border-color: var(--teal);
+    background: #e0f2f1;
+}
+
+.payment-option input[type="radio"] {
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.payment-option label {
+    flex: 1;
+    cursor: pointer;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+}
+
+.payment-icon {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.summary-card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+    margin-bottom: 25px;
+}
+
+.summary-card h3 {
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.summary-line {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--gray-border);
+    font-size: 14px;
+}
+
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--green);
+}
+
+.summary-savings {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    color: var(--teal);
+    font-size: 14px;
+    font-weight: 500;
+    display: none;
+}
+
+.savings-amount {
+    color: var(--teal);
+}
+
+.summary-divider {
+    height: 1px;
+    background: var(--gray-border);
+    margin: 15px 0;
+}
+
+.btn-checkout {
+    width: 100%;
+    margin: 20px 0 15px;
+}
+
+.security-notice {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background: #e8f5e9;
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--green-dark);
+}
+
+.security-icon {
+    font-size: 18px;
+}

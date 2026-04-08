@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль - Linomello</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/assistant.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <h1>Linomello</h1>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">Главная</a>
+                    <a href="catalog.html" class="nav-link">Каталог</a>
+                    <a href="collections.html" class="nav-link">Коллекции</a>
+                    <a href="about.html" class="nav-link">О нас</a>
+                    <a href="contacts.html" class="nav-link">Контакты</a>
+                </nav>
+                <div class="header-actions" id="headerActions">
+                    <!-- Будет заполнено через JavaScript -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Profile Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Личный кабинет</h1>
+            <p>Управление вашим профилем и настройками</p>
+        </div>
+    </section>
+
+    <!-- Profile Content -->
+    <section class="profile">
+        <div class="container">
+            <div class="profile-layout">
+                <!-- Sidebar -->
+                <aside class="orders-sidebar">
+                    <div class="user-profile">
+                        <div class="user-avatar">👤</div>
+                        <div class="user-info">
+                            <h3 id="userName">Иван Петров</h3>
+                            <p id="userEmail">user@example.com</p>
+                        </div>
+                    </div>
+                    
+                    <nav class="profile-nav">
+                        <a href="profile.html" class="nav-item active">Личные данные</a>
+                        <a href="new-profile.html" class="nav-item">Новый профиль</a>
+                        <a href="orders.html" class="nav-item">Мои заказы</a>
+                        <a href="wishlist.html" class="nav-item">Избранное</a>
+                        <a href="addresses.html" class="nav-item">Адреса доставки</a>
+                        <button class="nav-item logout-btn" onclick="authManager.logout()">Выйти</button>
+                    </nav>
+                </aside>
+
+                <!-- Main Content -->
+                <main class="profile-main">
+                    <!-- Profile Stats -->
+                    <div class="profile-stats">
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalOrders">0</div>
+                            <div class="stat-label">Всего заказов</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalSpent">0 ₽</div>
+                            <div class="stat-label">Всего потрачено</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="memberSince">2024</div>
+                            <div class="stat-label">С нами с</div>
+                        </div>
+                    </div>
+
+                    <!-- Profile Form -->
+                    <div class="profile-form">
+                        <h2>Личные данные</h2>
+                        <form id="profileForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName">Имя</label>
+                                    <input type="text" id="firstName" name="firstName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Фамилия</label>
+                                    <input type="text" id="lastName" name="lastName" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" required readonly>
+                                <small>Email нельзя изменить</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phone">Телефон</label>
+                                <input type="tel" id="phone" name="phone" placeholder="+7 (999) 123-45-67">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                        </form>
+
+                        <!-- Security Section -->
+                        <div class="security-section">
+                            <h3>Безопасность</h3>
+                            <div class="security-actions">
+                                <button class="btn btn-secondary" onclick="profileManager.changePassword()">
+                                    Сменить пароль
+                                </button>
+                                <button class="btn btn-secondary" onclick="profileManager.manageSessions()">
+                                    Активные сессии
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Preferences Section -->
+                        <div class="preferences-section">
+                            <h3>Настройки уведомлений</h3>
+                            <div class="preferences-options">
+                                <label class="checkbox-option">
+                                    <input type="checkbox" id="emailNotifications" checked>
+                                    <span class="checkmark"></span>
+                                    Email уведомления о заказах
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" id="smsNotifications">
+                                    <span class="checkmark"></span>
+                                    SMS уведомления
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" id="marketingEmails" checked>
+                                    <span class="checkmark"></span>
+                                    Рассылка о новинках и акциях
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Linomello</h3>
+                    <p>Создаем элитную мебель с 2010 года. Индивидуальный подход, премиальные материалы, вечное качество.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Контакты</h4>
+                    <p>Москва, ул. Пречистенка, 15</p>
+                    <p>+7 (495) 123-45-67</p>
+                    <p>info@linomello.ru</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Часы работы</h4>
+                    <p>Пн-Пт: 10:00-20:00</p>
+                    <p>Сб-Вс: 11:00-18:00</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Подписка</h4>
+                    <p>Будьте в курсе новых коллекций</p>
+                    <div class="subscribe-form">
+                        <input type="email" placeholder="Ваш email">
+                        <button class="btn btn-primary">Подписаться</button>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Linomello. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+<!-- Bot -->
+<script src="js/assistant.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/profile.js"></script>
+    <script src="js/mobile.js"></script>    <script src="js/assistant.js"></script></body>
+</html>
+
+

@@ -1,0 +1,519 @@
+/* ============================================
+   LINOMELLO AI ASSISTANT STYLES
+   ============================================ */
+
+/* Переменные */
+:root {
+    --assistant-primary: #1f5a31;
+    --assistant-secondary: #7fcc75;
+    --assistant-accent: #d8f1d3;
+    --assistant-text: #1d4228;
+    --assistant-light: #f8fbf6;
+    --assistant-white: #ffffff;
+    --assistant-border: #dbead9;
+    --assistant-shadow: 0 8px 32px rgba(31, 90, 49, 0.12);
+    --assistant-shadow-hover: 0 12px 48px rgba(31, 90, 49, 0.18);
+}
+
+/* Виджет ассистента */
+.linomello-assistant-widget {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    z-index: 9998;
+}
+
+/* Кнопка открытия */
+.assistant-toggle-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--assistant-primary) 0%, var(--assistant-secondary) 100%);
+    border: none;
+    color: var(--assistant-white);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--assistant-shadow);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.assistant-toggle-btn:hover {
+    transform: scale(1.1);
+    box-shadow: var(--assistant-shadow-hover);
+}
+
+.assistant-toggle-btn:active {
+    transform: scale(0.95);
+}
+
+.assistant-toggle-btn svg {
+    width: 28px;
+    height: 28px;
+    position: relative;
+    z-index: 2;
+}
+
+/* Индикатор статуса */
+.assistant-indicator {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: #4ade80;
+    border: 3px solid var(--assistant-white);
+    border-radius: 50%;
+    bottom: 0;
+    right: 0;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* Основная панель */
+.assistant-panel {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    width: 420px;
+    height: 600px;
+    background: var(--assistant-white);
+    border-radius: 16px;
+    box-shadow: var(--assistant-shadow-hover);
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Заголовок */
+.assistant-header {
+    background: linear-gradient(135deg, var(--assistant-primary) 0%, #2d7a42 100%);
+    color: var(--assistant-white);
+    padding: 20px;
+    border-radius: 16px 16px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.assistant-header-content {
+    flex: 1;
+}
+
+.assistant-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.title-text {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.title-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.assistant-subtitle {
+    font-size: 13px;
+    opacity: 0.9;
+    margin-bottom: 8px;
+}
+
+.assistant-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+.status-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+.status-indicator.online {
+    background: #4ade80;
+    box-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
+}
+
+.status-indicator.offline {
+    background: #f87171;
+}
+
+/* Кнопки управления */
+.assistant-header-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.assistant-control-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--assistant-white);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.assistant-control-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+.assistant-control-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Контейнер сообщений */
+.assistant-messages-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    background: var(--assistant-light);
+    display: flex;
+    flex-direction: column;
+}
+
+.assistant-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Сообщения */
+.message {
+    display: flex;
+    animation: messageAppear 0.3s ease-out;
+}
+
+@keyframes messageAppear {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message-user {
+    justify-content: flex-end;
+}
+
+.message-user .message-content {
+    background: var(--assistant-primary);
+    color: var(--assistant-white);
+    border-radius: 12px 12px 4px 12px;
+}
+
+.message-assistant {
+    justify-content: flex-start;
+}
+
+.message-assistant .message-content {
+    background: var(--assistant-white);
+    color: var(--assistant-text);
+    border: 1px solid var(--assistant-border);
+    border-radius: 12px 12px 12px 4px;
+}
+
+.message-typing .message-content {
+    background: var(--assistant-white);
+    border: 1px solid var(--assistant-border);
+    padding: 12px 16px;
+    border-radius: 12px;
+}
+
+.message-content {
+    max-width: 80%;
+    padding: 12px 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+/* Приветствие */
+.message-greeting {
+    text-align: center;
+    padding: 20px;
+    color: var(--assistant-text);
+}
+
+.greeting-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+.greeting-text {
+    font-size: 14px;
+    color: var(--assistant-light-text);
+    font-weight: 500;
+}
+
+/* Индикатор печати */
+.typing-indicator {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    padding: 12px 16px;
+}
+
+.typing-indicator span {
+    width: 8px;
+    height: 8px;
+    background: var(--assistant-secondary);
+    border-radius: 50%;
+    animation: typing 1.4s infinite;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+    0%, 60%, 100% {
+        opacity: 0.3;
+        transform: translateY(0);
+    }
+    30% {
+        opacity: 1;
+        transform: translateY(-8px);
+    }
+}
+
+/* Рекомендации */
+.assistant-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 12px 0;
+    margin: 8px 0;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.suggestion-btn {
+    background: var(--assistant-accent);
+    border: 1px solid var(--assistant-border);
+    color: var(--assistant-primary);
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.suggestion-btn:hover {
+    background: var(--assistant-primary);
+    color: var(--assistant-white);
+    border-color: var(--assistant-primary);
+    transform: translateY(-2px);
+}
+
+.suggestion-btn:active {
+    transform: translateY(0);
+}
+
+/* Секция ввода */
+.assistant-input-section {
+    padding: 12px;
+    background: var(--assistant-white);
+    border-top: 1px solid var(--assistant-border);
+    border-radius: 0 0 16px 16px;
+}
+
+.input-wrapper {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.assistant-input {
+    flex: 1;
+    border: 1px solid var(--assistant-border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: all 0.2s;
+    background: var(--assistant-light);
+}
+
+.assistant-input:focus {
+    border-color: var(--assistant-secondary);
+    background: var(--assistant-white);
+    box-shadow: 0 0 0 3px rgba(127, 204, 117, 0.1);
+}
+
+.assistant-input::placeholder {
+    color: #999;
+}
+
+/* Кнопка отправки */
+.assistant-send-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: none;
+    background: linear-gradient(135deg, var(--assistant-primary) 0%, var(--assistant-secondary) 100%);
+    color: var(--assistant-white);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.assistant-send-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(127, 204, 117, 0.4);
+}
+
+.assistant-send-btn:active {
+    transform: scale(0.95);
+}
+
+.assistant-send-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Прокрутка */
+.assistant-messages-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.assistant-messages-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.assistant-messages-container::-webkit-scrollbar-thumb {
+    background: var(--assistant-border);
+    border-radius: 3px;
+}
+
+.assistant-messages-container::-webkit-scrollbar-thumb:hover {
+    background: var(--assistant-secondary);
+}
+
+/* Мобильные стили */
+@media (max-width: 768px) {
+    .assistant-panel {
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+        border-radius: 0;
+        animation: slideUpFull 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes slideUpFull {
+        from {
+            opacity: 0;
+            transform: translateY(100vh);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .assistant-toggle-btn {
+        width: 56px;
+        height: 56px;
+    }
+
+    .message-content {
+        max-width: 90%;
+    }
+}
+
+/* Dark mode поддержка */
+@media (prefers-color-scheme: dark) {
+    .linomello-assistant-widget {
+        --assistant-white: #1a1a1a;
+        --assistant-light: #0f0f0f;
+        --assistant-text: #e0e0e0;
+        --assistant-border: #333;
+    }
+}
+
+/* Анимация появления */
+.assistant-messages-container {
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

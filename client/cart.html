@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/cart-styles.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <h1>Linomello</h1>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">Главная</a>
+                    <a href="catalog.html" class="nav-link">Каталог</a>
+                    <a href="collections.html" class="nav-link">Коллекции</a>
+                    <a href="about.html" class="nav-link">О нас</a>
+                    <a href="contacts.html" class="nav-link">Контакты</a>
+                </nav>
+                <div class="header-actions">
+                    <button class="search-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M21 21L16.514 16.506L21 21ZM19 10.5C19 15.194 15.194 19 10.5 19C5.806 19 2 15.194 2 10.5C2 5.806 5.806 2 10.5 2C15.194 2 19 5.806 19 10.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <a href="login.html" class="auth-link">Войти</a>
+                    <a href="cart.html" class="cart-link">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.4 5.2 16.4H17M17 13V16.4M9 19C9 19.6 8.6 20 8 20C7.4 20 7 19.6 7 19C7 18.4 7.4 18 8 18C8.6 18 9 18.4 9 19ZM17 19C17 19.6 16.6 20 16 20C15.4 20 15 19.6 15 19C15 18.4 15.4 18 16 18C16.6 18 17 18.4 17 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span class="cart-count">2</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <section class="page-header">
+        <div class="container">
+            <h1>Корзина</h1>
+            <p>Ваши выбранные товары</p>
+        </div>
+    </section>
+
+    <section class="cart">
+        <div class="container">
+            <div class="cart-layout">
+                <!-- Cart Items -->
+                <div class="cart-items">
+                    <div class="cart-header">
+                        <div class="header-product">Товар</div>
+                        <div class="header-price">Цена</div>
+                        <div class="header-quantity">Количество</div>
+                        <div class="header-total">Итого</div>
+                        <div class="header-actions"></div>
+                    </div>
+
+                    <div class="cart-items-list" id="cartItems">
+
+                    </div>
+
+                    <div class="cart-empty" id="cartEmpty">
+                        <div class="empty-content">
+                            <div class="empty-icon">🛒</div>
+                            <h3>Ваша корзина пуста</h3>
+                            <p>Добавьте товары из каталога, чтобы сделать заказ</p>
+                            <a href="catalog.html" class="btn btn-primary">Перейти в каталог</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cart-summary">
+                    <div class="summary-card">
+                        <h3>Итог заказа</h3>
+                        
+                        <div class="summary-line">
+                            <span>Товары (2)</span>
+                            <span>534 000 ₽</span>
+                        </div>
+                        
+                        <div class="summary-line">
+                            <span>Доставка</span>
+                            <span class="free">Бесплатно</span>
+                        </div>
+                        
+                        <div class="summary-line">
+                            <span>Сборка</span>
+                            <span class="free">Включена</span>
+                        </div>
+
+                        <div class="summary-divider"></div>
+
+                        <div class="summary-total">
+                            <span>Общая сумма</span>
+                            <span>534 000 ₽</span>
+                        </div>
+
+                        <div class="summary-savings">
+                            <span>Ваша экономия</span>
+                            <span class="savings-amount">55 000 ₽</span>
+                        </div>
+
+                        <button class="btn btn-primary btn-checkout" id="checkoutBtn">
+                            Оформить заказ
+                        </button>
+
+                        <div class="security-notice">
+                            <div class="security-icon">🔒</div>
+                            <p>Безопасная оплата. Ваши данные защищены</p>
+                        </div>
+                    </div>
+
+                    <div class="delivery-form">
+                        <h4>Данные доставки</h4>
+                        <div class="form-group">
+                            <label for="shippingAddress">Адрес доставки *</label>
+                            <input type="text" id="shippingAddress" placeholder="Улица, дом, квартира" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipientName">Имя получателя *</label>
+                            <input type="text" id="recipientName" placeholder="ФИО" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipientPhone">Телефон получателя *</label>
+                            <input type="tel" id="recipientPhone" placeholder="Вашего телефон" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="customerNotes">Примечания к заказу</label>
+                            <textarea id="customerNotes" placeholder="Дополнительная информация (опционально)" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="delivery-options">
+                        <h4>Способ доставки</h4>
+                        <div class="delivery-option selected">
+                            <input type="radio" name="delivery" id="delivery1" value="Бесплатная доставка по Москве" data-cost="0" checked>
+                            <label for="delivery1">
+                                <span class="option-title">Бесплатная доставка</span>
+                                <span class="option-desc">По Москве в пределах МКАД</span>
+                                <span class="option-price">Бесплатно</span>
+                            </label>
+                        </div>
+                        <div class="delivery-option">
+                            <input type="radio" name="delivery" id="delivery2" value="Экспресс-доставка" data-cost="5000">
+                            <label for="delivery2">
+                                <span class="option-title">Экспресс-доставка</span>
+                                <span class="option-desc">Доставка за 24 часа</span>
+                                <span class="option-price">5 000 ₽</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="payment-methods">
+                        <h4>Способы оплаты</h4>
+                        <div class="payment-options">
+                            <div class="payment-option">
+                                <input type="radio" name="payment" id="payment1" value="Банковская карта" checked>
+                                <label for="payment1">
+                                    <span class="payment-icon">💳</span>
+                                    <span>Банковская карта</span>
+                                </label>
+                            </div>
+                            <div class="payment-option">
+                                <input type="radio" name="payment" id="payment2" value="Рассрочка 0%">
+                                <label for="payment2">
+                                    <span class="payment-icon">🤝</span>
+                                    <span>Рассрочка 0%</span>
+                                </label>
+                            </div>
+                            <div class="payment-option">
+                                <input type="radio" name="payment" id="payment3" value="Наличные при получении">
+                                <label for="payment3">
+                                    <span class="payment-icon">💵</span>
+                                    <span>Наличные при получении</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <section class="recently-viewed">
+                <h2>Недавно просмотренные</h2>
+                <div class="products-grid">
+                    <div class="product-card">
+                        <div class="product-image">🛋️</div>
+                        <div class="product-content">
+                            <h3 class="product-title">Кресло "Флоренция"</h3>
+                            <div class="product-price">
+                                <span class="current-price">89 000 ₽</span>
+                                <span class="old-price">99 000 ₽</span>
+                            </div>
+                            <button class="btn btn-primary">В корзину</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">📦</div>
+                        <div class="product-content">
+                            <h3 class="product-title">Стол "Венеция"</h3>
+                            <div class="product-price">
+                                <span class="current-price">420 000 ₽</span>
+                                <span class="old-price">450 000 ₽</span>
+                            </div>
+                            <button class="btn btn-primary">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Linomello</h3>
+                    <p>Создаем элитную мебель с 2010 года. Индивидуальный подход, премиальные материалы, вечное качество.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Контакты</h4>
+                    <p>Москва, ул. Пречистенка, 15</p>
+                    <p>+7 (495) 123-45-67</p>
+                    <p>info@linomello.ru</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Часы работы</h4>
+                    <p>Пн-Пт: 10:00-20:00</p>
+                    <p>Сб-Вс: 11:00-18:00</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Подписка</h4>
+                    <p>Будьте в курсе новых коллекций</p>
+                    <div class="subscribe-form">
+                        <input type="email" placeholder="Ваш email">
+                        <button class="btn btn-primary">Подписаться</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+<script src="js/assistant.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/mobile.js"></script>
+    <script src="js/assistant-new.js"></script>
+</body>
+</html>
+
+

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои заказы</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/assistant.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <h1>Linomello</h1>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">Главная</a>
+                    <a href="catalog.html" class="nav-link">Каталог</a>
+                    <a href="collections.html" class="nav-link">Коллекции</a>
+                    <a href="about.html" class="nav-link">О нас</a>
+                    <a href="contacts.html" class="nav-link">Контакты</a>
+                </nav>
+                <div class="header-actions" id="headerActions">
+
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+    <section class="page-header">
+        <div class="container">
+            <h1>Мои заказы</h1>
+            <p>История ваших покупок</p>
+        </div>
+    </section>
+
+
+    <section class="orders">
+        <div class="container">
+            <div class="orders-layout">
+
+                <aside class="orders-sidebar">
+                    <div class="user-profile">
+                        <div class="user-avatar">👤</div>
+                        <div class="user-info">
+                            <h3 id="userName">Иван Петров</h3>
+                            <p id="userEmail">user@example.com</p>
+                        </div>
+                    </div>
+                    
+                    <nav class="profile-nav">
+                        <a href="profile.html" class="nav-item">Личные данные</a>
+                        <a href="orders.html" class="nav-item active">Мои заказы</a>
+                        <a href="wishlist.html" class="nav-item">Избранное</a>
+                        <a href="addresses.html" class="nav-item">Адреса доставки</a>
+                        <button class="nav-item logout-btn" onclick="authManager.logout()">Выйти</button>
+                    </nav>
+                </aside>
+
+
+                <main class="orders-main">
+
+                    <div class="orders-filter">
+                        <button class="filter-btn active" data-filter="all">Все заказы</button>
+                        <button class="filter-btn" data-filter="pending">Ожидают</button>
+                        <button class="filter-btn" data-filter="confirmed">Подтверждены</button>
+                        <button class="filter-btn" data-filter="shipped">Отправлены</button>
+                        <button class="filter-btn" data-filter="delivered">Доставлены</button>
+                    </div>
+
+
+                    <div class="orders-list" id="ordersList">
+
+                    </div>
+
+
+                    <div class="orders-empty" id="ordersEmpty">
+                        <div class="empty-content">
+                            <div class="empty-icon">📦</div>
+                            <h3>У вас пока нет заказов</h3>
+                            <p>Совершите первую покупку в нашем магазине</p>
+                            <a href="catalog.html" class="btn btn-primary">Перейти к покупкам</a>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </section>
+
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Linomello</h3>
+                    <p>Создаем элитную мебель с 2010 года. Индивидуальный подход, премиальные материалы, вечное качество.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Контакты</h4>
+                    <p>Москва, ул. Пречистенка, 15</p>
+                    <p>+7 (495) 123-45-67</p>
+                    <p>info@linomello.ru</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Часы работы</h4>
+                    <p>Пн-Пт: 10:00-20:00</p>
+                    <p>Сб-Вс: 11:00-18:00</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Подписка</h4>
+                    <p>Будьте в курсе новых коллекций</p>
+                    <div class="subscribe-form">
+                        <input type="email" placeholder="Ваш email">
+                        <button class="btn btn-primary">Подписаться</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+<script src="js/assistant.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/orders.js"></script>
+    <script src="js/mobile.js"></script>
+    <script src="js/assistant-new.js"></script>
+</body>
+</html>
+
+

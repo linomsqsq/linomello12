@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <h1>Linomello</h1>
+                </div>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Меню">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <nav class="nav" id="mainNav">
+                    <a href="index.html" class="nav-link">Главная</a>
+                    <a href="catalog.html" class="nav-link">Каталог</a>
+                    <a href="collections.html" class="nav-link">Коллекции</a>
+                    <a href="about.html" class="nav-link">О нас</a>
+                    <a href="contacts.html" class="nav-link">Контакты</a>
+                </nav>
+                <div class="header-actions" id="headerActions">
+                    <a href="login.html" class="auth-link">Войти</a>
+                    <a href="cart.html" class="cart-link">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L4.7 15.3C4.3 15.7 4.6 16.4 5.2 16.4H17M17 13V16.4M9 19C9 19.6 8.6 20 8 20C7.4 20 7 19.6 7 19C7 18.4 7.4 18 8 18C8.6 18 9 18.4 9 19ZM17 19C17 19.6 16.6 20 16 20C15.4 20 15 19.6 15 19C15 18.4 15.4 18 16 18C16.6 18 17 18.4 17 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span class="cart-count">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+    <div class="admin-layout">
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div style="padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <h3 style="margin: 0; color: white; font-size: 16px; font-weight: 600;">Администрация</h3>
+                <button class="admin-mobile-menu-btn" id="adminMenuBtn" aria-label="Закрыть меню" style="display: none;">✕</button>
+            </div>
+            <nav class="admin-nav">
+                <a href="#dashboard" class="admin-nav-item active" data-section="dashboard">
+                    📊 Дашборд
+                </a>
+                <a href="#orders" class="admin-nav-item" data-section="orders">
+                    📦 Заказы
+                </a>
+                <a href="#products" class="admin-nav-item" data-section="products">
+                    🛍️ Товары
+                </a>
+                <a href="#users" class="admin-nav-item" data-section="users">
+                    👥 Пользователи
+                </a>
+                <a href="#categories" class="admin-nav-item" data-section="categories">
+                    📁 Категории
+                </a>
+                <a href="#collections" class="admin-nav-item" data-section="collections">
+                    🎨 Коллекции
+                </a>
+            </nav>
+        </aside>
+        <main class="admin-content">
+            <section id="dashboard" class="admin-section active">
+                <h1>Дашборд</h1>
+                <div class="admin-stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalUsers">0</div>
+                        <div class="stat-label">Пользователи</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalProducts">0</div>
+                        <div class="stat-label">Товары</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalOrders">0</div>
+                        <div class="stat-label">Заказы</div>
+                        <div class="stat-note" id="pendingOrders">В ожидании: 0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalCategories">0</div>
+                        <div class="stat-label">Категории</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalCollections">0</div>
+                        <div class="stat-label">Коллекции</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalRevenue">0 ₽</div>
+                        <div class="stat-label">Выручка</div>
+                    </div>
+                </div>
+                <div class="admin-table">
+                    <div class="table-header">Последние заказы</div>
+                    <div class="table-content" id="recentOrders">
+
+                    </div>
+                </div>
+            </section>
+
+
+            <section id="orders" class="admin-section">
+                <div class="section-header">
+                    <h1>Управление заказами</h1>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="adminManager.exportOrders()">
+                            Экспорт заказов
+                        </button>
+                    </div>
+                </div>
+
+                <div class="admin-table">
+                    <div class="table-header">
+                        <div class="table-row">
+                            <div>ID</div>
+                            <div>Клиент</div>
+                            <div>Сумма</div>
+                            <div>Статус</div>
+                            <div>Дата</div>
+                            <div>Действия</div>
+                        </div>
+                    </div>
+                    <div class="table-content" id="ordersTable">
+                    </div>
+                </div>
+            </section>
+            <section id="products" class="admin-section">
+                <div class="section-header">
+                    <h1>Управление товарами</h1>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="adminManager.addProduct()">
+                            + Добавить товар
+                        </button>
+                        <button class="btn btn-secondary" onclick="adminManager.autoUploadProductImages()">
+                            🤖 ИИ сама загружает фото
+                        </button>
+                    </div>
+                </div>
+
+                <div class="admin-table">
+                    <div class="table-header">
+                        <div class="table-row">
+                            <div>ID</div>
+                            <div>Название</div>
+                            <div>Цена</div>
+                            <div>Категория</div>
+                            <div>Статус</div>
+                            <div>Действия</div>
+                        </div>
+                    </div>
+                    <div class="table-content" id="productsTable">
+
+                    </div>
+                </div>
+            </section>
+
+
+            <section id="users" class="admin-section">
+                <div class="section-header">
+                    <h1>Управление пользователями</h1>
+                </div>
+
+                <div class="admin-table">
+                    <div class="table-header">
+                        <div class="table-row">
+                            <div>ID</div>
+                            <div>Имя</div>
+                            <div>Email</div>
+                            <div>Роль</div>
+                            <div>Дата регистрации</div>
+                            <div>Действия</div>
+                        </div>
+                    </div>
+                    <div class="table-content" id="usersTable">
+
+                    </div>
+                </div>
+            </section>
+
+            <section id="categories" class="admin-section">
+                <div class="section-header">
+                    <h1>Управление категориями</h1>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="adminPanel.addCategory()">
+                            + Добавить категорию
+                        </button>
+                    </div>
+                </div>
+
+                <div class="admin-table">
+                    <div class="table-header">
+                        <div class="table-row">
+                            <div>ID</div>
+                            <div>Название</div>
+                            <div>Описание</div>
+                            <div>Действия</div>
+                        </div>
+                    </div>
+                    <div class="table-content" id="categoriesTable">
+                    </div>
+                </div>
+            </section>
+
+            <section id="collections" class="admin-section">
+                <div class="section-header">
+                    <h1>Управление коллекциями</h1>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="adminPanel.addCollection()">
+                            + Добавить коллекцию
+                        </button>
+                    </div>
+                </div>
+
+                <div class="admin-table">
+                    <div class="table-header">
+                        <div class="table-row">
+                            <div>ID</div>
+                            <div>Название</div>
+                            <div>Описание</div>
+                            <div>Действия</div>
+                        </div>
+                    </div>
+                    <div class="table-content" id="collectionsTable">
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+<script src="js/assistant.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin-modern.js"></script>
+    <script src="js/mobile.js"></script>
+    <script>
+        // Mobile Menu Toggle for Admin Panel
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const adminSidebar = document.getElementById('adminSidebar');
+            const adminMenuBtn = document.getElementById('adminMenuBtn');
+            const mainNav = document.getElementById('mainNav');
+
+            if (mobileMenuBtn && mainNav) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    mobileMenuBtn.classList.toggle('active');
+                    mainNav.classList.toggle('active');
+                });
+
+                const navLinks = mainNav.querySelectorAll('.nav-link');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenuBtn.classList.remove('active');
+                        mainNav.classList.remove('active');
+                    });
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.nav') && !e.target.closest('.mobile-menu-btn')) {
+                        mobileMenuBtn.classList.remove('active');
+                        mainNav.classList.remove('active');
+                    }
+                });
+            }
+
+            // Admin Sidebar Mobile Toggle
+            if (adminMenuBtn && adminSidebar) {
+                adminMenuBtn.addEventListener('click', () => {
+                    adminSidebar.classList.toggle('show');
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.admin-sidebar') && !e.target.closest('#adminMenuBtn')) {
+                        adminSidebar.classList.remove('show');
+                    }
+                });
+
+                const adminNavItems = document.querySelectorAll('.admin-nav-item');
+                adminNavItems.forEach(item => {
+                    item.addEventListener('click', () => {
+                        if (window.innerWidth <= 768) {
+                            adminSidebar.classList.remove('show');
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+
+

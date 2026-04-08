@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Коллекции</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/assistant.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <h1>Linomello</h1>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">Главная</a>
+                    <a href="catalog.html" class="nav-link">Каталог</a>
+                    <a href="collections.html" class="nav-link active">Коллекции</a>
+                    <a href="about.html" class="nav-link">О нас</a>
+                    <a href="contacts.html" class="nav-link">Контакты</a>
+                </nav>
+                <div class="header-actions" id="headerActions"></div>
+            </div>
+        </div>
+    </header>
+    <section class="page-header">
+        <div class="container">
+            <h1>Наши коллекции</h1>
+            <p>Изысканные интерьерные решения с натуральными материалами и утонченными формами.</p>
+            <div class="collections-intro-grid">
+                <div class="intro-card">
+                    <h3>Эксклюзивный стиль</h3>
+                    <p>Каждая коллекция создается как законченная история для гостиной, спальни или кабинета.</p>
+                </div>
+                <div class="intro-card">
+                    <h3>Идеи для интерьера</h3>
+                    <p>От спокойного минимализма до роскошного декора — подберем мебель для любого проекта.</p>
+                </div>
+                <div class="intro-card">
+                    <h3>Теплая атмосфера</h3>
+                    <p>Натуральные текстуры и зелено-белая палитра создают уют и ощущение свежести.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="collections-page">
+        <div class="container">
+            <div class="collections-grid-full" id="collectionsGrid">
+
+            </div>
+        </div>
+    </section>
+    <div class="collection-modal" id="collectionModal">
+        <div class="modal-overlay" onclick="collectionsManager.closeModal()"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="collectionsManager.closeModal()">×</button>
+            <div id="collectionDetail"></div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Linomello</h3>
+                    <p>Создаем элитную мебель с 2010 года. Индивидуальный подход, премиальные материалы, вечное качество.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Контакты</h4>
+                    <p>Москва, ул. Пречистенка, 15</p>
+                    <p>+7 (495) 123-45-67</p>
+                    <p>info@linomello.ru</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Часы работы</h4>
+                    <p>Пн-Пт: 10:00-20:00</p>
+                    <p>Сб-Вс: 11:00-18:00</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/auth.js"></script>
+    <script src="js/collections.js"></script>
+    <script src="js/mobile.js"></script>
+    <script src="js/assistant-new.js"></script>
+</body>
+</html>
+
+

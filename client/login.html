@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/assistant.css">
+</head>
+<body class="auth-page">
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <h1>Linomello</h1>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">Главная</a>
+                    <a href="catalog.html" class="nav-link">Каталог</a>
+                    <a href="collections.html" class="nav-link">Коллекции</a>
+                    <a href="about.html" class="nav-link">О нас</a>
+                    <a href="contacts.html" class="nav-link">Контакты</a>
+                </nav>
+                <div class="header-actions">
+                    <a href="register.html" class="auth-link">Регистрация</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <section class="auth-section">
+        <div class="container">
+            <div class="auth-layout">
+                <div class="auth-form-container">
+                    <div class="auth-header">
+                        <h1>Вход в аккаунт</h1>
+                        <p>Войдите в свой аккаунт для управления заказами</p>
+                    </div>
+
+                    <form class="auth-form" id="loginForm">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required placeholder="your@email.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Пароль</label>
+                            <input type="password" id="password" name="password" required placeholder="Введите пароль">
+                            <div class="password-toggle">
+                                <button type="button" class="toggle-password">👁️</button>
+                            </div>
+                        </div>
+
+                        <div class="form-options">
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="remember">
+                                <span class="checkmark"></span>
+                                Запомнить меня
+                            </label>
+                            <a href="forgot-password.html" class="forgot-password">Забыли пароль?</a>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-auth">
+                            <span class="btn-text">Войти</span>
+                            <span class="btn-loading" style="display: none;">Загрузка...</span>
+                        </button>
+
+                        <div class="auth-divider">
+                            <span>или войдите через</span>
+                        </div>
+
+                        <div class="social-auth">
+                            <button type="button" class="btn btn-social btn-google">
+                                <span class="social-icon">🔍</span>
+                                Google
+                            </button>
+                            <button type="button" class="btn btn-social btn-yandex">
+                                <span class="social-icon">Я</span>
+                                Yandex
+                            </button>
+                        </div>
+
+                        <div class="auth-footer">
+                            <p>Нет аккаунта? <a href="register.html">Зарегистрироваться</a></p>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="auth-benefits">
+                    <div class="benefits-content">
+                        <h2>Преимущества аккаунта</h2>
+                        <div class="benefits-list">
+                            <div class="benefit-item">
+                                <div class="benefit-icon">📦</div>
+                                <div class="benefit-text">
+                                    <h3>История заказов</h3>
+                                    <p>Отслеживайте статус и историю всех заказов</p>
+                                </div>
+                            </div>
+                            <div class="benefit-item">
+                                <div class="benefit-icon">❤️</div>
+                                <div class="benefit-text">
+                                    <h3>Избранное</h3>
+                                    <p>Сохраняйте понравившиеся товары</p>
+                                </div>
+                            </div>
+                            <div class="benefit-item">
+                                <div class="benefit-icon">🎁</div>
+                                <div class="benefit-text">
+                                    <h3>Специальные предложения</h3>
+                                    <p>Получайте эксклюзивные скидки и акции</p>
+                                </div>
+                            </div>
+                            <div class="benefit-item">
+                                <div class="benefit-icon">⚡</div>
+                                <div class="benefit-text">
+                                    <h3>Быстрое оформление</h3>
+                                    <p>Сохраняйте данные для быстрых покупок</p>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Linomello</h3>
+                    <p>Создаем элитную мебель с 2010 года. Индивидуальный подход, премиальные материалы, вечное качество.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Контакты</h4>
+                    <p>Москва, ул. Пречистенка, 15</p>
+                    <p>+7 (495) 123-45-67</p>
+                    <p>info@linomello.ru</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Часы работы</h4>
+                    <p>Пн-Пт: 10:00-20:00</p>
+                    <p>Сб-Вс: 11:00-18:00</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+<script src="js/assistant.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/login.js"></script>
+    <script src="js/mobile.js"></script>
+</body>
+</html>
+
+
