@@ -1033,6 +1033,7 @@ class AdminPanelModern {
                         <div class="form-group">
                             <label>URL изображения</label>
                             <input type="text" id="colImage">
+                            <button type="button" class="btn btn-secondary btn-small" onclick="adminPanel.uploadCollectionImage()">📤 Загрузить</button>
                         </div>
                     </form>
                 </div>
@@ -1117,6 +1118,39 @@ class AdminPanelModern {
         } catch (error) {
             alert('Ошибка: ' + error.message);
         }
+    }
+
+    async uploadCollectionImage() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                const response = await fetch('/api/admin/upload-collection-image', {
+                    method: 'POST',
+                    headers: authManager.getAuthHeaders(),
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('colImage').value = data.imageUrl;
+                    this.showMessage('✅ Изображение загружено!', 'success');
+                } else {
+                    const err = await response.json();
+                    alert('Ошибка загрузки: ' + (err.error || 'Неизвестная ошибка'));
+                }
+            } catch (error) {
+                alert('Ошибка загрузки: ' + error.message);
+            }
+        };
+        input.click();
     }
 
     // ПОМОЩНИКИ

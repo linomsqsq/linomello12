@@ -7,29 +7,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="css/assistant.css">
+    <link rel="stylesheet" href="css/responsive.css">
     
-    <style>
-        /* Дополнительные стили для чата */
-        .ai-status {
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 12px;
-            background: rgba(0,0,0,0.5);
-            margin-left: 8px;
-        }
-        .ai-status.online {
-            color: #4CAF50;
-        }
-        .ai-status.offline {
-            color: #f44336;
-        }
-        .bot-message::before {
-            content: "🪑";
-            margin-right: 8px;
-        }
-    </style>
 </head>
 <body>
     <header class="header">
@@ -81,17 +61,10 @@
                     </div>
                 </div>
                 <div class="hero-illustration">
-                    <svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Лампа -->
-                        <rect x="240" y="80" width="15" height="120" fill="#d4af37"/>
-                        <circle cx="247.5" cy="70" r="20" fill="#f0e68c"/>
-                        <path d="M240 190 Q245 210 255 210" stroke="#d4af37" stroke-width="3" fill="none"/>
-                        <!-- Кресло -->
-                        <circle cx="120" cy="280" r="70" fill="#7fcc75"/>
-                        <rect x="80" y="200" width="80" height="80" rx="10" fill="#8bc34a"/>
-                        <rect x="100" y="320" width="40" height="50" fill="#6ba663"/>
-                        <ellipse cx="120" cy="380" rx="50" ry="15" fill="#5a9d52"/>
-                    </svg>
+                    <div class="hero-slider" id="heroSlider">
+                        <img id="heroSlideImage" src="images/products/39k5spm8xks5bmoqa10g0cbox3285ajl.jpg" alt="Премиальная мебель" />
+                        <div class="hero-slider-dots" id="heroSliderDots"></div>
+                    </div>
                 </div>
             </div>
             
@@ -113,13 +86,36 @@
         </div>
     </section>
 
+    <section class="assistant-section">
+        <div class="assistant-card container">
+            <div class="assistant-card-content">
+                <span class="assistant-chip">AI-консультант</span>
+                <h2>Giga Chat поможет выбрать мебель быстрее</h2>
+                <p>Задайте вопрос о материалах, размерах, сроках или доставке — бот ответит моментально и профессионально.</p>
+                <button class="btn btn-dark" type="button" onclick="assistantManager.open()">Поговорить с ботом</button>
+            </div>
+            <div class="assistant-card-visual">
+                <div class="assistant-card-box">
+                    <div class="assistant-bubble">Привет! Я помогу подобрать идеальное кресло для гостиной.</div>
+                    <div class="assistant-bubble assistant-bubble-small">Спросите о доставке, гарантии или дизайне.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <div class="container">
         <!-- Категории мебели -->
         <section class="categories-section">
             <h2 class="section-title" style="margin-bottom: 40px;">Категории мебели</h2>
-            <div class="categories-grid" id="categoriesContainer">
+            <div class="categories-grid" id="categoriesGrid">
                 <!-- Категории загружаются из API -->
             </div>
+        </section>
+
+        <!-- Коллекции -->
+        <section class="collections-section">
+            <h2 class="section-title">Коллекции</h2>
+            <div class="collections-banner" id="homepageCollections"></div>
         </section>
 
         <!-- Почему выбирают нас -->
@@ -155,17 +151,11 @@
                 <h2 class="section-title">Избранные работы</h2>
                 <a href="catalog.html" class="view-all-link">Смотреть все →</a>
             </div>
-            <div class="products-grid" id="featuredProductsContainer">
+            <div class="products-grid" id="featuredProducts">
                 <!-- Товары загружаются из API -->
             </div>
         </section>
 
-        <!-- Консультация -->
-        <section class="consultation-section">
-            <h2>Готовы создать уникальный интерьер?</h2>
-            <p>Закажите бесплатную консультацию нашего дизайнера</p>
-            <button class="consultation-btn" onclick="handleConsultation()">Записаться на консультацию</button>
-        </section>
     </div>
 
     <!-- Footer -->
@@ -197,355 +187,10 @@
         </div>
     </footer>
 
-    <!-- ===== ЧАТ С ЛОКАЛЬНОЙ НЕЙРОСЕТЬЮ ===== -->
-    <div id="chat-container" style="position: fixed; bottom: 30px; right: 30px; z-index: 9999;">
-        <button id="chat-toggle" style="width: 60px; height: 60px; border-radius: 50%; background: #1a1a2e; border: 2px solid #d4af37; color: white; font-size: 28px; cursor: pointer; box-shadow: 0 10px 25px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">
-            <span>💬</span>
-        </button>
-        <div id="chat-box" style="position: absolute; bottom: 75px; right: 0; width: 350px; background: white; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); display: none; flex-direction: column; overflow: hidden;">
-            <div style="background: #1a1a2e; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer;" id="chatHeader">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <span style="font-size: 24px;">🪑</span>
-                    <div>
-                        <strong>Linomello Assistant</strong>
-                        <span id="aiStatus" style="font-size: 10px; margin-left: 8px;">⏳</span>
-                        <div style="font-size: 10px; opacity: 0.8;">Нейросеть на русском 🇷🇺</div>
-                    </div>
-                </div>
-                <div>
-                    <button id="chat-minimize" style="background: none; border: none; color: white; cursor: pointer; font-size: 18px;">−</button>
-                    <button id="chat-close" style="background: none; border: none; color: white; cursor: pointer; font-size: 18px; margin-left: 10px;">✕</button>
-                </div>
-            </div>
-            <div id="chat-messages" style="height: 350px; overflow-y: auto; padding: 15px; background: #f5f5f5; display: flex; flex-direction: column; gap: 10px;"></div>
-            <div style="display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 15px; background: white; border-top: 1px solid #eee;" id="quickReplies">
-                <button class="quick-btn" data-question="Какие диваны есть в наличии?" style="background: #f0f0f0; border: none; padding: 8px 15px; border-radius: 20px; font-size: 12px; cursor: pointer;">Диваны</button>
-                <button class="quick-btn" data-question="Сколько стоит кухня на заказ?" style="background: #f0f0f0; border: none; padding: 8px 15px; border-radius: 20px; font-size: 12px; cursor: pointer;">Цены</button>
-                <button class="quick-btn" data-question="Как заказать мебель по индивидуальным размерам?" style="background: #f0f0f0; border: none; padding: 8px 15px; border-radius: 20px; font-size: 12px; cursor: pointer;">Индивидуальный заказ</button>
-            </div>
-            <div style="display: flex; padding: 15px; background: white; border-top: 1px solid #eee; gap: 10px;">
-                <input type="text" id="chat-input" placeholder="Спросите про мебель..." style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 25px; outline: none;">
-                <button id="chat-send" style="background: #1a1a2e; border: none; width: 45px; height: 45px; border-radius: 50%; color: white; cursor: pointer;">📩</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // ===== НЕЙРОСЕТЬ (OLLAMA) =====
-        const API_URL = "http://localhost:11434/api/generate";
-        const MODEL_NAME = "llama3.2:1b";
-
-        async function checkOllamaStatus() {
-            const statusSpan = document.getElementById('aiStatus');
-            if (!statusSpan) return false;
-            try {
-                const response = await fetch('http://localhost:11434/api/tags', {
-                    method: 'GET',
-                    mode: 'cors'
-                });
-                if (response.ok) {
-                    statusSpan.textContent = '● Online';
-                    statusSpan.style.color = '#4CAF50';
-                    return true;
-                } else {
-                    throw new Error('Ollama не отвечает');
-                }
-            } catch (error) {
-                statusSpan.textContent = '● Offline';
-                statusSpan.style.color = '#f44336';
-                return false;
-            }
-        }
-
-        async function queryLocalAI(prompt) {
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        model: MODEL_NAME,
-                        prompt: `Ты - консультант мебельного магазина Linomello в России. Помогаешь клиентам с выбором мебели.
-
-ПРАВИЛА:
-1. ОТВЕЧАЙ ТОЛЬКО НА РУССКОМ ЯЗЫКЕ
-2. Будь вежливым и профессиональным
-3. Отвечай кратко (2-4 предложения)
-4. Если спрашивают про цены - называй примерные цены в рублях
-
-Вопрос клиента: ${prompt}
-
-Ответ на русском языке:`,
-                        stream: false,
-                        options: { temperature: 0.7, max_tokens: 400 }
-                    })
-                });
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                const data = await response.json();
-                return data.response || "Извините, не могу ответить на вопрос.";
-            } catch (error) {
-                console.error('Ошибка AI:', error);
-                return "❌ Нейросеть не запущена. Откройте терминал VS Code и выполните:\n\n`ollama run " + MODEL_NAME + "`\n\nДождитесь загрузки модели и обновите страницу.";
-            }
-        }
-
-        // ===== КОД ЧАТА =====
-        (function() {
-            const toggleBtn = document.getElementById('chat-toggle');
-            const chatBox = document.getElementById('chat-box');
-            const minimizeBtn = document.getElementById('chat-minimize');
-            const closeBtn = document.getElementById('chat-close');
-            const chatHeader = document.getElementById('chatHeader');
-            const messagesDiv = document.getElementById('chat-messages');
-            const input = document.getElementById('chat-input');
-            const sendBtn = document.getElementById('chat-send');
-            const quickBtns = document.querySelectorAll('.quick-btn');
-
-            let isTyping = false;
-
-            checkOllamaStatus();
-
-            function openChat() {
-                chatBox.style.display = 'flex';
-                toggleBtn.style.opacity = '0';
-                toggleBtn.style.pointerEvents = 'none';
-                if (messagesDiv.children.length === 0) {
-                    addMessage('Здравствуйте! 🇷🇺 Я консультант Linomello на нейросети. Отвечаю на русском языке. Чем могу помочь? 🪑', 'bot');
-                }
-            }
-
-            function closeChat() {
-                chatBox.style.display = 'none';
-                toggleBtn.style.opacity = '1';
-                toggleBtn.style.pointerEvents = 'auto';
-            }
-
-            function toggleMinimize() {
-                if (chatBox.style.minHeight === 'auto') {
-                    chatBox.style.minHeight = '';
-                    chatBox.style.height = '';
-                } else {
-                    chatBox.style.minHeight = '60px';
-                    chatBox.style.height = '60px';
-                    chatBox.querySelector('#chat-messages').style.display = 'none';
-                    chatBox.querySelector('#quickReplies').style.display = 'none';
-                    chatBox.querySelector('#chat-input-area').style.display = 'none';
-                }
-            }
-
-            toggleBtn.addEventListener('click', openChat);
-            closeBtn.addEventListener('click', closeChat);
-            minimizeBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleMinimize(); });
-            chatHeader.addEventListener('click', (e) => { if (!e.target.closest('button')) toggleMinimize(); });
-
-            function addMessage(text, sender) {
-                const msgDiv = document.createElement('div');
-                msgDiv.style.maxWidth = '80%';
-                msgDiv.style.padding = '10px 15px';
-                msgDiv.style.borderRadius = '20px';
-                msgDiv.style.fontSize = '13px';
-                msgDiv.style.wordWrap = 'break-word';
-                msgDiv.style.whiteSpace = 'pre-wrap';
-                
-                if (sender === 'user') {
-                    msgDiv.style.background = '#1a1a2e';
-                    msgDiv.style.color = 'white';
-                    msgDiv.style.alignSelf = 'flex-end';
-                    msgDiv.style.borderBottomRightRadius = '5px';
-                } else {
-                    msgDiv.style.background = '#e9ecef';
-                    msgDiv.style.color = '#333';
-                    msgDiv.style.alignSelf = 'flex-start';
-                    msgDiv.style.borderBottomLeftRadius = '5px';
-                }
-                
-                msgDiv.innerText = text;
-                messagesDiv.appendChild(msgDiv);
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
-            }
-
-            function showTyping() {
-                if (isTyping) return;
-                isTyping = true;
-                const typingDiv = document.createElement('div');
-                typingDiv.id = 'typingIndicator';
-                typingDiv.style.background = '#e9ecef';
-                typingDiv.style.padding = '10px 15px';
-                typingDiv.style.borderRadius = '20px';
-                typingDiv.style.alignSelf = 'flex-start';
-                typingDiv.style.display = 'flex';
-                typingDiv.style.gap = '4px';
-                typingDiv.innerHTML = '<span style="width: 8px; height: 8px; background: #999; border-radius: 50%; animation: pulse 1s infinite;"></span><span style="width: 8px; height: 8px; background: #999; border-radius: 50%; animation: pulse 1s infinite 0.2s;"></span><span style="width: 8px; height: 8px; background: #999; border-radius: 50%; animation: pulse 1s infinite 0.4s;"></span>';
-                messagesDiv.appendChild(typingDiv);
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
-            }
-
-            function hideTyping() {
-                const typing = document.getElementById('typingIndicator');
-                if (typing) typing.remove();
-                isTyping = false;
-            }
-
-            async function sendMessage(text) {
-                if (!text.trim()) return;
-                addMessage(text, 'user');
-                input.value = '';
-                showTyping();
-                const aiResponse = await queryLocalAI(text);
-                setTimeout(() => { hideTyping(); addMessage(aiResponse, 'bot'); }, 200);
-            }
-
-            sendBtn.addEventListener('click', () => sendMessage(input.value));
-            input.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(input.value); });
-            quickBtns.forEach(btn => { btn.addEventListener('click', () => sendMessage(btn.dataset.question)); });
-        })();
-
-        // ========== ОСНОВНОЙ КОД САЙТА ==========
-        document.addEventListener('DOMContentLoaded', () => {
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-            const mainNav = document.getElementById('mainNav');
-            const navLinks = mainNav.querySelectorAll('a');
-
-            if (mobileMenuBtn) {
-                mobileMenuBtn.addEventListener('click', () => {
-                    mobileMenuBtn.classList.toggle('active');
-                    mainNav.classList.toggle('active');
-                });
-            }
-
-            navLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileMenuBtn.classList.remove('active');
-                    mainNav.classList.remove('active');
-                });
-            });
-
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest('.nav') && !e.target.closest('.mobile-menu-btn')) {
-                    mobileMenuBtn.classList.remove('active');
-                    mainNav.classList.remove('active');
-                }
-            });
-        });
-
-        async function loadCategories() {
-            try {
-                const response = await fetch('/api/categories');
-                const data = await response.json();
-                const categories = data.categories || data;
-                const container = document.getElementById('categoriesContainer');
-                
-                const categoryIcons = {
-                    'Диваны': '🛋️',
-                    'Кресла': '🪑',
-                    'Столы': '🪑',
-                    'Стулья': '🪑',
-                    'Кровати': '🛏️',
-                    'Шкафы': '🚪'
-                };
-                
-                container.innerHTML = categories.map(cat => `
-                    <a href="catalog.html?category=${encodeURIComponent(cat.name)}" class="category-card">
-                        <div class="category-icon">${categoryIcons[cat.name] || '📦'}</div>
-                        <h3>${cat.name}</h3>
-                    </a>
-                `).join('');
-            } catch (error) {
-                console.error('Ошибка при загрузке категорий:', error);
-            }
-        }
-
-        async function loadFeaturedProducts() {
-            try {
-                const response = await fetch('/api/products?limit=12');
-                const data = await response.json();
-                const products = data.products || data;
-                const container = document.getElementById('featuredProductsContainer');
-                
-                container.innerHTML = products.map(product => {
-                    const discount = product.old_price ? Math.round((1 - product.price / product.old_price) * 100) : 0;
-                    return `
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="${product.image_url || '/images/placeholder.jpg'}" alt="${product.name}" onerror="this.src='/images/placeholder.jpg'">
-                            ${discount > 0 ? `<div class="product-badge">-${discount}%</div>` : ''}
-                            <button class="wishlist-btn" data-id="${product.id}" title="Добавить в избранное">❤️</button>
-                        </div>
-                        <div class="product-info">
-                            <p class="product-brand">${product.category_name || 'LINOMELLO'}</p>
-                            <h3 class="product-name">${product.name}</h3>
-                            <div class="product-price-block">
-                                <span class="product-price">${product.price.toLocaleString('ru-RU')} ₽</span>
-                                ${product.old_price ? `<span class="product-old-price">${product.old_price.toLocaleString('ru-RU')} ₽</span>` : ''}
-                            </div>
-                            <a href="product.html?id=${product.id}" class="btn-small">Подробнее</a>
-                        </div>
-                    </div>
-                `}).join('');
-
-                document.querySelectorAll('.wishlist-btn').forEach(btn => {
-                    btn.addEventListener('click', async (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        const productId = btn.dataset.id;
-                        const token = localStorage.getItem('token');
-                        if (!token) {
-                            window.location.href = 'login.html';
-                            return;
-                        }
-                        try {
-                            const response = await fetch(`/api/wishlist/${productId}`, {
-                                method: btn.classList.contains('active') ? 'DELETE' : 'POST',
-                                headers: {
-                                    'Authorization': `Bearer ${token}`,
-                                    'Content-Type': 'application/json'
-                                }
-                            });
-                            if (response.ok) {
-                                btn.classList.toggle('active');
-                            }
-                        } catch (error) {
-                            console.error('Ошибка:', error);
-                        }
-                    });
-                });
-            } catch (error) {
-                console.error('Ошибка при загрузке товаров:', error);
-            }
-        }
-
-        function handleConsultation() {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = 'login.html';
-            } else {
-                alert('Спасибо за интерес! Дизайнер свяжется с вами в ближайшее время.');
-            }
-        }
-
-        function updateCartCount() {
-            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-            const cartCount = document.querySelector('.cart-count');
-            if (cartCount) cartCount.textContent = count;
-        }
-
-        function updateAuthUI() {
-            const token = localStorage.getItem('token');
-            const authLink = document.querySelector('.auth-link');
-            if (token && authLink) {
-                authLink.textContent = 'Личный кабинет';
-                authLink.href = 'profile.html';
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            loadCategories();
-            loadFeaturedProducts();
-            updateCartCount();
-            updateAuthUI();
-        });
-    </script>
+    <script src="js/app.js"></script>
+    <script src="js/auth.js"></script>
     <script src="js/cart.js"></script>
+    <script src="js/assistant.js"></script>
     <script src="js/mobile.js"></script>
 </body>
 </html>

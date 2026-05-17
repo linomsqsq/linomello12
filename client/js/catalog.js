@@ -17,8 +17,21 @@ class CatalogManager {
     async init() {
         await this.loadProducts();
         this.setupEventListeners();
+        this.applyInitialSearch();
         this.displayProducts();
         this.renderPagination();
+    }
+
+    applyInitialSearch() {
+        const params = new URLSearchParams(window.location.search);
+        const searchTerm = params.get('search')?.trim();
+        if (searchTerm) {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.value = searchTerm;
+            }
+            this.handleSearch();
+        }
     }
 
     async loadProducts() {

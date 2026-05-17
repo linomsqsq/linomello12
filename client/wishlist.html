@@ -3,40 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мои заказы</title>
+    <title>Избранное - Linomello</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="css/assistant.css">
-    <style>
-        .user-avatar-container {
-            position: relative;
-            display: inline-block;
-            margin-bottom: 15px;
-        }
-        .avatar-upload-btn {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            background: #d4af37;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-        .avatar-upload-btn:hover {
-            background: #b8941f;
-        }
-        .user-avatar {
-            border: 3px solid #d4af37;
-        }
-    </style>
 </head>
 <body>
     <header class="header">
@@ -59,18 +30,16 @@
         </div>
     </header>
 
-
     <section class="page-header">
         <div class="container">
-            <h1>Мои заказы</h1>
-            <p>История ваших покупок</p>
+            <h1>Избранное</h1>
+            <p>Ваши любимые товары</p>
         </div>
     </section>
 
-
-    <section class="orders">
+    <section class="wishlist">
         <div class="container">
-            <div class="orders-layout">
+            <div class="wishlist-layout">
 
                 <aside class="orders-sidebar">
                     <div class="user-profile">
@@ -89,37 +58,25 @@
                             <p id="userEmail">user@example.com</p>
                         </div>
                     </div>
-                    
+
                     <nav class="profile-nav">
                         <a href="profile.html" class="nav-item">Личные данные</a>
-                        <a href="orders.html" class="nav-item active">Мои заказы</a>
-                        <a href="wishlist.html" class="nav-item">Избранное</a>
+                        <a href="orders.html" class="nav-item">Мои заказы</a>
+                        <a href="wishlist.html" class="nav-item active">Избранное</a>
                         <button class="nav-item logout-btn" onclick="authManager.logout()">Выйти</button>
                     </nav>
                 </aside>
 
-
-                <main class="orders-main">
-
-                    <div class="orders-filter">
-                        <button class="filter-btn active" data-filter="all">Все заказы</button>
-                        <button class="filter-btn" data-filter="pending">Ожидают</button>
-                        <button class="filter-btn" data-filter="confirmed">Подтверждены</button>
-                        <button class="filter-btn" data-filter="shipped">Отправлены</button>
-                        <button class="filter-btn" data-filter="delivered">Доставлены</button>
+                <main class="wishlist-main">
+                    <div class="wishlist-grid" id="wishlistGrid">
+                        <!-- Товары из избранного -->
                     </div>
 
-
-                    <div class="orders-list" id="ordersList">
-
-                    </div>
-
-
-                    <div class="orders-empty" id="ordersEmpty">
+                    <div class="wishlist-empty" id="wishlistEmpty">
                         <div class="empty-content">
-                            <div class="empty-icon">📦</div>
-                            <h3>У вас пока нет заказов</h3>
-                            <p>Совершите первую покупку в нашем магазине</p>
+                            <div class="empty-icon">❤️</div>
+                            <h3>Ваше избранное пусто</h3>
+                            <p>Добавьте товары в избранное, чтобы не потерять их</p>
                             <a href="catalog.html" class="btn btn-primary">Перейти к покупкам</a>
                         </div>
                     </div>
@@ -127,7 +84,6 @@
             </div>
         </div>
     </section>
-
 
     <footer class="footer">
         <div class="container">
@@ -156,14 +112,15 @@
                     </div>
                 </div>
             </div>
-
+            <div class="footer-bottom">
+                <p>&copy; 2024 Linomello. Все права защищены.</p>
+            </div>
         </div>
     </footer>
+
     <script src="js/auth.js"></script>
-    <script src="js/orders.js"></script>
+    <script src="js/wishlist.js"></script>
     <script src="js/mobile.js"></script>
     <script src="js/assistant.js"></script>
 </body>
 </html>
-
-

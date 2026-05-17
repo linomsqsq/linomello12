@@ -39,6 +39,16 @@ class ProfileManager {
         document.getElementById('email').value = user.email || '';
         document.getElementById('phone').value = user.phone || '';
 
+        // Устанавливаем аватар
+        const avatarImg = document.getElementById('userAvatar');
+        if (user.avatar_url) {
+            avatarImg.src = user.avatar_url;
+            avatarImg.style.display = 'block';
+        } else {
+            avatarImg.src = 'data:image/svg+xml;base64,' + btoa('<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="40" cy="40" r="40" fill="#f0f0f0"/><text x="40" y="45" text-anchor="middle" font-family="Arial" font-size="24" fill="#999">👤</text></svg>');
+            avatarImg.style.display = 'block';
+        }
+
         // Обновляем отображаемое имя
         document.getElementById('userName').textContent = `${user.first_name} ${user.last_name}`;
         document.getElementById('userEmail').textContent = user.email;
@@ -59,6 +69,12 @@ class ProfileManager {
         const form = document.getElementById('profileForm');
         if (form) {
             form.addEventListener('submit', (e) => this.handleSubmit(e));
+        }
+
+        // Загрузка аватарки
+        const avatarInput = document.getElementById('avatarInput');
+        if (avatarInput) {
+            avatarInput.addEventListener('change', (e) => this.handleAvatarUpload(e));
         }
 
         // Настройки уведомлений
@@ -110,6 +126,49 @@ class ProfileManager {
             } else {
                 const data = await response.json();
                 throw new Error(data.error || 'Ошибка обновления профиля');
+            }
+        } catch (error) {
+            this.showMessage(error.message, 'error');
+        }
+    }
+
+    async handleAvatarUpload(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Проверка размера файла (2MB)
+        if (file.size > 2 * 1024 * 1024) {
+            this.showMessage('Файл слишком большой. Максимум 2MB', 'error');
+            return;
+        }
+
+        // Проверка типа файла
+        if (!file.type.startsWith('image/')) {
+            this.showMessage('Пожалуйста, выберите изображение', 'error');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('avatar', file);
+
+        try {
+            const response = await fetch('/api/users/avatar', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${authManager.token}`
+                    // Не устанавливаем Content-Type для FormData
+                },
+                body: formData
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                // Обновляем аватар на странице
+                document.getElementById('userAvatar').src = data.avatarUrl;
+                this.showMessage('Аватар успешно обновлен', 'success');
+            } else {
+                const data = await response.json();
+                throw new Error(data.error || 'Ошибка загрузки аватара');
             }
         } catch (error) {
             this.showMessage(error.message, 'error');

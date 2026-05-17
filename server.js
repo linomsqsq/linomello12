@@ -10,7 +10,7 @@ const axios = require('axios');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3005;
 const JWT_SECRET = 'linomello-secret-key-2024';
 const YANDEX_API_KEY = process.env.YANDEX_API_KEY || '';
 
@@ -50,6 +50,36 @@ const productStorage = multer.diskStorage({
     }
 });
 
+const avatarStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        let uploadPath = path.join(__dirname, 'client', 'images', 'avatars');
+        if (!fs.existsSync(uploadPath)) {
+            fs.mkdirSync(uploadPath, { recursive: true });
+        }
+        cb(null, uploadPath);
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const ext = path.extname(file.originalname);
+        cb(null, 'avatar-' + uniqueSuffix + ext);
+    }
+});
+
+const uploadAvatar = multer({ 
+    storage: avatarStorage,
+    limits: { fileSize: 2 * 1024 * 1024 }, // 2MB для аватаров
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = /jpeg|jpg|png|gif|webp/;
+        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase()); 
+        const mimetype = allowedTypes.test(file.mimetype);
+        if (mimetype && extname) {
+            return cb(null, true);
+        } else {
+            cb(new Error('Только изображения разрешены!'));
+        }
+    }
+});
+
 const upload = multer({ 
     storage: storage,
     limits: { fileSize: 5 * 1024 * 1024 },
@@ -67,6 +97,21 @@ const upload = multer({
 
 const uploadProduct = multer({ 
     storage: productStorage,
+    limits: { fileSize: 5 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = /jpeg|jpg|png|gif|webp/;
+        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase()); 
+        const mimetype = allowedTypes.test(file.mimetype);
+        if (mimetype && extname) {
+            return cb(null, true);
+        } else {
+            cb(new Error('Только изображения разрешены!'));
+        }
+    }
+});
+
+const uploadCollection = multer({ 
+    storage: storage,
     limits: { fileSize: 5 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
         const allowedTypes = /jpeg|jpg|png|gif|webp/;
@@ -265,6 +310,44 @@ async function createInitialData() {
                     ('Стул "Классик"', 'Классический деревянный стул с мягкой спинкой. Украшение любого интерьера.', 35000, 42000, 4, 2, 'Массив дуба, Кожа', '45x50x90 см', '/images/products/666x444_85.webp', 1),
                     ('Кровать "Роскошь"', 'Огромная кровать с массивным резным изголовьем. Премиум качество.', 450000, 520000, 5, 2, 'Массив красного дерева, Шелк', '220x200x160 см', '/images/products/dc3pjqchb3q8qzxjs5w0lfmb5o1kd3rz.jpg', 1)
                 `);
+
+                // Добавляем дополнительные товары для наполнения коллекций
+                setTimeout(() => {
+                    db.run(`
+                        INSERT INTO products (name, description, price, old_price, category_id, collection_id, material, dimensions, image_url, is_featured) VALUES 
+                        -- Коллекция "Неаполь" (4) - добавляем больше товаров
+                        ('Диван "Неаполь"', 'Итальянский диван с мягкой обивкой и резными элементами. Средиземноморский стиль.', 285000, 320000, 1, 4, 'Вельвет, Массив дуба', '230x100x90 см', 'https://via.placeholder.com/800x500/FF6B35/FFFFFF?text=Диван+Неаполь', 0),
+                        ('Кресло "Неаполь"', 'Удобное кресло в средиземноморском стиле с гобеленовой обивкой.', 65000, 75000, 2, 4, 'Гобелен, Массив дуба', '80x90x100 см', 'https://via.placeholder.com/800x500/FF6B35/FFFFFF?text=Кресло+Неаполь', 0),
+                        ('Обеденный стол "Неаполь"', 'Круглый обеденный стол с мозаичной столешницей. На 6 персон.', 180000, 210000, 3, 4, 'Мрамор, Металл', '140x140x75 см', 'https://via.placeholder.com/800x500/FF6B35/FFFFFF?text=Стол+Неаполь', 0),
+                        ('Кровать "Неаполь"', 'Спальная кровать с кованым изголовьем. Итальянская роскошь.', 280000, 320000, 5, 4, 'Ковка, Текстиль', '180x200x120 см', 'https://via.placeholder.com/800x500/FF6B35/FFFFFF?text=Кровать+Неаполь', 0),
+                        ('Шкаф "Неаполь"', 'Вместительный шкаф с резными дверцами. Средиземноморский дизайн.', 220000, 250000, 6, 4, 'Массив дуба, Зеркало', '200x60x210 см', 'https://via.placeholder.com/800x500/FF6B35/FFFFFF?text=Шкаф+Неаполь', 0),
+
+                        -- Коллекция "Венеция" (3) - добавляем больше товаров
+                        ('Диван "Венеция"', 'Роскошный диван с бархатной обивкой и золотыми акцентами.', 320000, 360000, 1, 3, 'Бархат, Золото', '240x110x95 см', 'https://via.placeholder.com/800x500/4169E1/FFFFFF?text=Диван+Венеция', 0),
+                        ('Кресло "Венеция"', 'Элегантное кресло с позолотой и шелковой обивкой.', 95000, 110000, 2, 3, 'Шелк, Золото', '90x100x110 см', 'https://via.placeholder.com/800x500/4169E1/FFFFFF?text=Кресло+Венеция', 0),
+                        ('Стул "Венеция"', 'Стул с резной спинкой и мягким сиденьем. Венецианский стиль.', 55000, 65000, 4, 3, 'Массив дуба, Бархат', '50x55x100 см', 'https://via.placeholder.com/800x500/4169E1/FFFFFF?text=Стул+Венеция', 0),
+                        ('Кровать "Венеция"', 'Кровать с балдахином и роскошным изголовьем. Королевский комфорт.', 380000, 420000, 5, 3, 'Шелк, Массив дуба', '210x190x170 см', 'https://via.placeholder.com/800x500/4169E1/FFFFFF?text=Кровать+Венеция', 0),
+                        ('Шкаф "Венеция"', 'Шкаф с позолоченными ручками и зеркальными вставками.', 260000, 290000, 6, 3, 'Массив дуба, Зеркало', '220x65x215 см', 'https://via.placeholder.com/800x500/4169E1/FFFFFF?text=Шкаф+Венеция', 0),
+
+                        -- Коллекция "Милан" (1) - добавляем больше товаров
+                        ('Кресло "Милан"', 'Современное кресло с итальянским дизайном. Комфорт и стиль.', 78000, 90000, 2, 1, 'Кожа, Металл', '85x90x95 см', 'https://via.placeholder.com/800x500/DC143C/FFFFFF?text=Кресло+Милан', 0),
+                        ('Стул "Милан"', 'Эргономичный стул с кожаной обивкой. Итальянское качество.', 42000, 48000, 4, 1, 'Кожа, Металл', '48x52x92 см', 'https://via.placeholder.com/800x500/DC143C/FFFFFF?text=Стул+Милан', 0),
+                        ('Шкаф "Милан"', 'Модульный шкаф в современном стиле. Функциональность и дизайн.', 240000, 270000, 6, 1, 'ДСП, Стекло', '200x55x200 см', 'https://via.placeholder.com/800x500/DC143C/FFFFFF?text=Шкаф+Милан', 0),
+
+                        -- Коллекция "Флоренция" (2) - добавляем больше товаров
+                        ('Стол кофейный "Флоренция"', 'Элегантный кофейный столик с мраморной столешницей.', 85000, 95000, 3, 2, 'Мрамор, Металл', '100x60x50 см', 'https://via.placeholder.com/800x500/228B22/FFFFFF?text=Стол+Флоренция', 0),
+                        ('Стул "Флоренция"', 'Стул с резной спинкой и бархатным сиденьем.', 48000, 55000, 4, 2, 'Массив дуба, Бархат', '47x53x98 см', 'https://via.placeholder.com/800x500/228B22/FFFFFF?text=Стул+Флоренция', 0),
+                        ('Кровать "Флоренция"', 'Кровать с высоким изголовьем и мягкой обивкой.', 340000, 380000, 5, 2, 'Бархат, Массив дуба', '205x185x155 см', 'https://via.placeholder.com/800x500/228B22/FFFFFF?text=Кровать+Флоренция', 0),
+
+                        -- Коллекция "Минимализм" (5) - добавляем больше товаров
+                        ('Диван угловой "Минимал"', 'Угловой диван с модульной конструкцией. Максимальный комфорт.', 195000, 230000, 1, 5, 'Лен, Металл', '280x160x80 см', 'https://via.placeholder.com/800x500/708090/FFFFFF?text=Диван+угловой+Минимал', 0),
+                        ('Кресло "Минимал"', 'Простое кресло с чистыми линиями. Функциональный дизайн.', 45000, 55000, 2, 5, 'Дуб, Текстиль', '78x88x88 см', 'https://via.placeholder.com/800x500/708090/FFFFFF?text=Кресло+Минимал', 0),
+                        ('Обеденный стол "Минимал"', 'Простой обеденный стол на 4 персоны. Скандинавский стиль.', 120000, 140000, 3, 5, 'Дуб натуральный', '160x80x75 см', 'https://via.placeholder.com/800x500/708090/FFFFFF?text=Стол+Минимал', 0),
+                        ('Стул "Минимал"', 'Стул с минималистичным дизайном. Удобство и простота.', 22000, 26000, 4, 5, 'Дуб, Пластик', '46x51x86 см', 'https://via.placeholder.com/800x500/708090/FFFFFF?text=Стул+Минимал', 0),
+                        ('Кровать "Минимал"', 'Низкая кровать с деревянным каркасом. Современный минимализм.', 160000, 190000, 5, 5, 'Дуб натуральный', '200x180x40 см', 'https://via.placeholder.com/800x500/708090/FFFFFF?text=Кровать+Минимал', 0),
+                        ('Шкаф "Минимал"', 'Встроенный шкаф с раздвижными дверцами. Экономия пространства.', 180000, 210000, 6, 5, 'ДСП, Зеркало', '250x45x200 см', 'https://via.placeholder.com/800x500/708090/FFFFFF?text=Шкаф+Минимал', 0)
+                    `);
+                }, 200);
             }, 100);
         }
     });
@@ -407,12 +490,6 @@ function requireAdmin(req, res, next) {
     next();
 }
 
-// ============== HEALTH CHECK ==============
-
-app.get('/api/health', (req, res) => {
-    res.json({ status: 'ok', timestamp: new Date().toISOString(), server: 'Linomello OK' });
-});
-
 // ============== FILE UPLOAD ==============
 // (Storage already configured above)
 
@@ -506,6 +583,22 @@ app.post('/api/admin/upload-product-image', authenticateToken, requireAdmin, upl
     res.json({
         success: true,
         url: imageUrl,
+        filename: req.file.filename,
+        size: req.file.size
+    });
+});
+
+app.post('/api/admin/upload-collection-image', authenticateToken, requireAdmin, uploadCollection.single('image'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ error: 'Файл не загружен' });
+    }
+
+    const imageUrl = `/images/uploads/${req.file.filename}`;
+    console.log('📸 Изображение коллекции загружено:', imageUrl);
+
+    res.json({
+        success: true,
+        imageUrl: imageUrl,
         filename: req.file.filename,
         size: req.file.size
     });
@@ -826,6 +919,30 @@ app.put('/api/users/profile', authenticateToken, (req, res) => {
     );
 });
 
+app.post('/api/users/avatar', authenticateToken, uploadAvatar.single('avatar'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ error: 'Файл не загружен' });
+    }
+
+    const avatarUrl = `/images/avatars/${req.file.filename}`;
+
+    db.run(
+        'UPDATE users SET avatar_url = ? WHERE id = ?',
+        [avatarUrl, req.user.userId],
+        function(err) {
+            if (err) {
+                console.error('Ошибка обновления аватара:', err);
+                return res.status(500).json({ error: 'Ошибка сохранения аватара' });
+            }
+
+            res.json({
+                message: 'Аватар обновлен',
+                avatarUrl: avatarUrl
+            });
+        }
+    );
+});
+
 // ============== ЗАКАЗЫ ==============
 
 app.get('/api/orders', authenticateToken, (req, res) => {
@@ -851,8 +968,8 @@ app.post('/api/orders', authenticateToken, (req, res) => {
     if (!shippingAddress) return res.status(400).json({ error: 'Адрес доставки обязателен' });
 
     const shippingCostValue = parseFloat(shippingCost) || 0;
-    const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const totalAmount = subtotal + shippingCostValue;
+    const subtotal = Math.round(items.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 100) / 100;
+    const totalAmount = Math.round((subtotal + shippingCostValue) * 100) / 100;
 
     db.serialize(() => {
         db.run(
@@ -1268,153 +1385,6 @@ app.delete('/api/admin/collections/:id', authenticateToken, requireAdmin, (req, 
     });
 });
 
-// ============== AI БОТ ==============
-
-const BOT_CONTEXT = `
-Ты профессиональный AI-ассистент премиум-бренда мебели "Linomello".
-
-О компании:
-- Название: Linomello
-- Специализация: мебель ручной работы высокого качества
-- Материалы: массив дуба, орех, натуральная кожа, итальянские ткани, премиальная фурнитура
-- Срок изготовления: 14-30 дней (зависит от сложности)
-- Доставка: Москва и МО, сборка и установка включены
-- Гарантия: 5 лет на все изделия
-- Цены: От 35,000 ₽ до 500,000 ₽ в зависимости от модели
-- Рассрочка: Доступна (уточняется у менеджера)
-
-Как отвечать:
-1. Будь вежливым и профессиональным
-2. Дай ПОЛНЫЙ и РАЗВЕРНУТЫЙ ответ (2-3 предложения минимум)
-3. Используй информацию о компании в ответах
-4. Если не знаешь точный ответ - предложи уточнить у менеджера
-5. Говори только на русском языке
-6. Отвечай только на вопросы о мебели, услугах, ценах, доставке, гарантии и оплате
-
-Примеры хороших ответов:
-- "Доставка осуществляется по Москве и Московской области. Стоимость рассчитывается индивидуально в зависимости от размера и сложности мебели. Сборка и установка уже включены в стоимость доставки. Обычно доставка происходит в течение 1-3 дней после завершения производства."
-- "Мы использует только премиальные материалы - массив дуба и ореха, натуральную кожу и итальянские ткани. Это гарантирует долгий срок службы и красивый внешний вид мебели на протяжении многих лет."
-
-Запомни: Отвечай как реальный консультант, дающий полезную информацию, а не короткие фразы!
-`;
-
-function buildBotMessagesText(message, page) {
-    return `${BOT_CONTEXT}
-
-Пользователь находится на странице: ${page}
-
-Вопрос клиента: "${message}"
-
-Дай полный и развернутый ответ как профессиональный консультант:`;
-}
-
-app.post('/api/bot/message', async (req, res) => {
-    const { message, page } = req.body;
-
-    if (!message || message.trim() === '') {
-        return res.status(400).json({ error: 'Сообщение не может быть пустым' });
-    }
-
-    let responseText = null;
-    let provider = 'fallback';
-
-    // Используем Yandex AI
-    if (YANDEX_API_KEY) {
-        const botContext = buildBotMessagesText(message, page || 'index.html');
-        const models = ['gpt-4o-mini', 'gpt-4o'];
-
-        for (const model of models) {
-            if (responseText) break;
-
-            try {
-                console.log(`🔄 Запрос к Yandex AI (${model})...`);
-                console.log(`📝 API Key: ${YANDEX_API_KEY.substring(0, 20)}...`);
-
-                const response = await axios.post(
-                    `https://api.generativeai.yandexcloud.net/v1/models/${model}/generate`,
-                    {
-                        input: botContext,
-                        temperature: 0.7,
-                        top_p: 0.95,
-                        max_output_tokens: 500
-                    },
-                    {
-                        headers: {
-                            'Authorization': `Api-Key ${YANDEX_API_KEY}`,
-                            'Content-Type': 'application/json'
-                        },
-                        timeout: 30000
-                    }
-                );
-
-                responseText = response.data?.result?.text
-                    || response.data?.output_text
-                    || response.data?.generated_text
-                    || response.data?.output?.[0]?.content?.text
-                    || response.data?.text;
-
-                if (responseText) {
-                    provider = `yandex:${model}`;
-                    console.log(`✅ ${model} ответил`);
-                } else {
-                    console.log(`⚠️ ${model}: нет текста в ответе`);
-                }
-            } catch (error) {
-                const errorMsg = error.response?.data?.error?.message || error.response?.data?.message || error.message;
-                const status = error.response?.status;
-
-                if (status === 401) {
-                    console.error(`❌ ${model}: Unauthorized - invalid Yandex API key`);
-                } else if (status === 429) {
-                    console.error(`❌ ${model}: Rate limit - ${errorMsg}`);
-                } else if (status === 400) {
-                    console.error(`❌ ${model}: Bad request - ${errorMsg}`);
-                } else {
-                    console.error(`❌ ${model} (${status}):`, errorMsg);
-                }
-            }
-        }
-    }
-
-    // Fallback если Yandex не сработал
-    if (!responseText) {
-        console.log('❌ AI service unavailable - no response from Yandex AI');
-        responseText = 'Извините, AI сервис временно недоступен. Пожалуйста, попробуйте позже или переформулируйте вопрос.';
-        provider = 'error';
-    }
-
-    res.json({
-        response: responseText,
-        suggestions: ['Каталог', 'Цены', 'Доставка', 'Гарантия', 'Контакты'],
-        provider: provider,
-        timestamp: new Date().toISOString()
-    });
-});
-
-app.get('/api/admin/product-images', authenticateToken, requireAdmin, (req, res) => {
-    const imagesDir = path.join(__dirname, 'client', 'images', 'products');
-
-    fs.readdir(imagesDir, (err, files) => {
-        if (err) {
-            return res.status(500).json({ error: 'Не удалось прочитать папку с изображениями' });
-        }
-
-        const images = files.filter(file => /\.(jpg|jpeg|png|gif|webp)$/i.test(file)).map(file => ({
-            filename: file,
-            url: `/images/products/${file}`
-        }));
-
-        res.json({ images });
-    });
-});
-
-app.get('/api/bot/status', (req, res) => {
-    if (YANDEX_API_KEY) {
-        return res.json({ status: 'online', provider: 'Yandex AI' });
-    }
-    res.json({ status: 'offline', provider: 'none', message: 'AI service not configured' });
-});
-
 // ============== HEALTH CHECK ==============
 
 app.get('/api/health', (req, res) => {
@@ -1434,12 +1404,8 @@ app.get('*', (req, res) => {
 // ============== ЗАПУСК СЕРВЕРА ==============
 
 app.listen(PORT, () => {
-    console.log('\n=================================');
     console.log('🚀 Linomello Server запущен!');
     console.log(`📍 Адрес: http://localhost:${PORT}`);
-    console.log('=================================');
-    console.log('🤖 AI-консультант: Yandex AI');
-    console.log('👤 Тестовые пользователи:' )
     console.log('   Админ: admin@linomello.ru / admin123');
     console.log('   Пользователь: user@example.com / user123');
     console.log('=================================\n');

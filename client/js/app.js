@@ -75,28 +75,90 @@ class FurnitureApp {
         grid.innerHTML = this.products.map(product => {
             const discount = product.old_price ? Math.round((1 - product.price / product.old_price) * 100) : 0;
             return `
-            <div class="product-card-modern">
-                <div class="product-image-modern">
-                    <img src="${product.image_url || `https://via.placeholder.com/480x320?text=${encodeURIComponent(product.name)}`}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.parentElement.innerHTML='🛋️'" />
-                </div>
-                <div class="product-content-modern">
-                    ${discount > 0 ? `<span class="product-badge">-${discount}%</span>` : ''}
-                    <h3 class="product-title-modern">${product.name}</h3>
-                    <p class="product-description">${product.description || product.material || 'Премиальная мебель' }</p>
-                    <div class="product-price-modern">
-                        <span class="current-price-modern">${this.formatPrice(product.price)} ₽</span>
-                        ${product.old_price ? `<span class="old-price-modern">${this.formatPrice(product.old_price)} ₽</span>` : ''}
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="${product.image_url || `https://via.placeholder.com/480x320?text=${encodeURIComponent(product.name)}`}" alt="${product.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='🛋️'" />
+                        ${discount > 0 ? `<span class="product-badge">-${discount}%</span>` : ''}
                     </div>
-                    <button class="btn btn-primary" onclick="furnitureApp.viewProduct(${product.id})">
-                        Подробнее
-                    </button>
+                    <div class="product-info">
+                        <p class="product-brand">${product.category_name || product.collection_name || 'Премиум мебель'}</p>
+                        <h3 class="product-name">${product.name}</h3>
+                        <p>${product.description || product.material || 'Премиальная мебель из натуральных материалов'}</p>
+                        <div class="product-price-block">
+                            <span class="product-price">${this.formatPrice(product.price)} ₽</span>
+                            ${product.old_price ? `<span class="product-old-price">${this.formatPrice(product.old_price)} ₽</span>` : ''}
+                        </div>
+                        <button class="btn-small" onclick="furnitureApp.viewProduct(${product.id})">Подробнее</button>
+                    </div>
                 </div>
-            </div>
-        `}).join('');
+            `;
+        }).join('');
 
         if (this.products.length > 0) {
             this.updateHeroProduct(this.products[0]);
+            this.setupHeroSlider();
         }
+    }
+
+    setupHeroSlider() {
+        const slides = this.products.slice(0, 4).filter(product => product.image_url);
+        if (!slides.length) return;
+
+        this.heroSlides = slides;
+        this.heroCurrentSlide = 0;
+
+        const sliderDots = document.getElementById('heroSliderDots');
+        const sliderImage = document.getElementById('heroSlideImage');
+        if (!sliderDots || !sliderImage) return;
+
+        sliderDots.innerHTML = slides.map((slide, index) => `
+            <button class="hero-slider-dot ${index === 0 ? 'active' : ''}" data-index="${index}" aria-label="Слайд ${index + 1}"></button>
+        `).join('');
+
+        sliderDots.querySelectorAll('.hero-slider-dot').forEach(dot => {
+            dot.addEventListener('click', (event) => {
+                const index = parseInt(event.currentTarget.dataset.index, 10);
+                this.switchHeroSlide(index);
+            });
+        });
+
+        this.startHeroSliderAuto();
+    }
+
+    startHeroSliderAuto() {
+        if (this.heroSliderInterval) {
+            clearInterval(this.heroSliderInterval);
+        }
+
+        this.heroSliderInterval = setInterval(() => {
+            const nextIndex = (this.heroCurrentSlide + 1) % this.heroSlides.length;
+            this.switchHeroSlide(nextIndex);
+        }, 5500);
+    }
+
+    switchHeroSlide(index) {
+        if (!this.heroSlides || this.heroSlides.length === 0) return;
+        this.heroCurrentSlide = index;
+
+        const slide = this.heroSlides[index];
+        const slideImage = document.getElementById('heroSlideImage');
+        const sliderDots = document.querySelectorAll('.hero-slider-dot');
+
+        if (slideImage) {
+            slideImage.src = slide.image_url;
+            slideImage.alt = slide.name;
+        }
+
+        sliderDots.forEach((dot, dotIndex) => {
+            dot.classList.toggle('active', dotIndex === index);
+        });
+    }
+
+    updateHeroProduct(product) {
+        const heroImage = document.getElementById('heroSlideImage');
+        if (!heroImage) return;
+        heroImage.src = product.image_url || `https://via.placeholder.com/760x640?text=${encodeURIComponent(product.name)}`;
+        heroImage.alt = product.name;
     }
 
     async loadCollectionsSection() {
@@ -122,17 +184,13 @@ class FurnitureApp {
         grid.innerHTML = this.collections.slice(0, 3).map(collection => {
             const imageStyle = collection.image_url ? `background-image: url('${collection.image_url}');` : '';
             return `
-            <div class="collection-card">
-                <a href="collection.html?id=${collection.id}" class="collection-image-large" style="${imageStyle}">
-                    ${collection.image_url ? '' : `<div class="collection-icon">${this.getCollectionIcon(collection.name)}</div>`}
-                </a>
-                <div class="collection-content">
-                    <h3>${collection.name}</h3>
-                    <p>${collection.description || 'Эксклюзивная мебель из натуральных материалов'}</p>
-                    <a href="collection.html?id=${collection.id}" class="collection-link">Смотреть →</a>
+                <div class="collection-card" onclick="location.href='collection.html?id=${collection.id}'" style="${imageStyle}">
+                    <div class="collection-info">
+                        <h3>${collection.name}</h3>
+                        <p>${collection.description || 'Эксклюзивная мебель из натуральных материалов'}</p>
+                    </div>
                 </div>
-            </div>
-        `;
+            `;
         }).join('');
     }
 
@@ -197,26 +255,26 @@ class FurnitureApp {
             document.getElementById('featuredProducts').innerHTML = demoProducts.map(product => {
                 const discount = product.old_price ? Math.round((1 - product.price / product.old_price) * 100) : 0;
                 return `
-                <div class="product-card-modern">
-                    <div class="product-image-modern">
-                        <img src="${product.image_url}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.parentElement.innerHTML='🛋️'" />
-                    </div>
-                    <div class="product-content-modern">
-                        ${discount > 0 ? `<span class="product-badge">-${discount}%</span>` : ''}
-                        <h3 class="product-title-modern">${product.name}</h3>
-                        <p class="product-description">${product.description}</p>
-                        <div class="product-price-modern">
-                            <span class="current-price-modern">${this.formatPrice(product.price)} ₽</span>
-                            ${product.old_price ? `<span class="old-price-modern">${this.formatPrice(product.old_price)} ₽</span>` : ''}
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="${product.image_url}" alt="${product.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='🛋️'" />
+                            ${discount > 0 ? `<span class="product-badge">-${discount}%</span>` : ''}
                         </div>
-                        <button class="btn btn-primary" onclick="furnitureApp.viewProduct(${product.id})">
-                            Подробнее
-                        </button>
+                        <div class="product-info">
+                            <p class="product-brand">${product.category_name || product.collection_name || 'Премиум мебель'}</p>
+                            <h3 class="product-name">${product.name}</h3>
+                            <p>${product.description}</p>
+                            <div class="product-price-block">
+                                <span class="product-price">${this.formatPrice(product.price)} ₽</span>
+                                ${product.old_price ? `<span class="product-old-price">${this.formatPrice(product.old_price)} ₽</span>` : ''}
+                            </div>
+                            <button class="btn-small" onclick="furnitureApp.viewProduct(${product.id})">Подробнее</button>
+                        </div>
                     </div>
-                </div>
-            `}).join('');
+                `;
+            }).join('');
 
-            const heroImage = document.getElementById('heroProductImage');
+            const heroImage = document.getElementById('heroSlideImage');
             if (heroImage && demoProducts.length) {
                 heroImage.src = demoProducts[0].image_url;
                 heroImage.alt = demoProducts[0].name;
@@ -310,7 +368,15 @@ class FurnitureApp {
             border: 1px solid var(--border-color);
             border-radius: 4px;
             margin-right: 10px;
+            min-width: 180px;
         `;
+
+        searchInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                this.handleSearch();
+            }
+        });
         
         searchContainer.insertBefore(searchInput, searchContainer.firstChild);
         searchInput.focus();

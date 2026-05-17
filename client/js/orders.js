@@ -213,9 +213,21 @@ class OrdersManager {
     updateUserDisplay(user) {
         const userName = document.getElementById('userName');
         const userEmail = document.getElementById('userEmail');
+        const userAvatar = document.getElementById('userAvatar');
 
         if (userName) userName.textContent = `${user.first_name} ${user.last_name}`;
         if (userEmail) userEmail.textContent = user.email;
+
+        // Устанавливаем аватар
+        if (userAvatar) {
+            if (user.avatar_url) {
+                userAvatar.src = user.avatar_url;
+                userAvatar.style.display = 'block';
+            } else {
+                userAvatar.src = 'data:image/svg+xml;base64,' + btoa('<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="40" cy="40" r="40" fill="#f0f0f0"/><text x="40" y="45" text-anchor="middle" font-family="Arial" font-size="24" fill="#999">👤</text></svg>');
+                userAvatar.style.display = 'block';
+            }
+        }
     }
 
     formatPrice(price) {

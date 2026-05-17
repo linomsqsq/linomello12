@@ -79,26 +79,37 @@ class CartManager {
         cartItemsContainer.innerHTML = this.cart.map(item => `
             <div class="cart-item" data-item-id="${item.id}">
                 <div class="cart-item-product">
-                    <div class="cart-item-image">${this.getCartItemImage(item)}</div>
+                    <div class="cart-item-image">
+                        ${item.image_url ? `<img src="${item.image_url}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/120x120?text=Linomello'" />` : (item.image || '<div class="cart-image-placeholder">🛋️</div>')}
+                    </div>
                     <div class="cart-item-details">
                         <h4>${item.name}</h4>
-                        <p>${item.material}</p>
+                        <p class="item-material">${item.material || 'Премиальные материалы'}</p>
+                        ${item.oldPrice ? `<span class="item-old-price">${this.formatPrice(item.oldPrice)} ₽</span>` : ''}
                     </div>
                 </div>
                 <div class="cart-item-price">
-                    ${this.formatPrice(item.price)} ₽
+                    <span class="price-label">Цена</span>
+                    <span class="price-value">${this.formatPrice(item.price)} ₽</span>
                 </div>
                 <div class="cart-item-quantity">
-                    <button class="quantity-btn minus" onclick="cartManager.updateQuantity(${item.id}, -1)">-</button>
+                    <button class="quantity-btn minus" onclick="cartManager.updateQuantity(${item.id}, -1)">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6H10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    </button>
                     <input type="number" class="quantity-input" value="${item.quantity}" min="1" max="10" 
                            onchange="cartManager.setQuantity(${item.id}, this.value)">
-                    <button class="quantity-btn plus" onclick="cartManager.updateQuantity(${item.id}, 1)">+</button>
+                    <button class="quantity-btn plus" onclick="cartManager.updateQuantity(${item.id}, 1)">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 2V10M2 6H10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    </button>
                 </div>
                 <div class="cart-item-total">
-                    ${this.formatPrice(item.price * item.quantity)} ₽
+                    <span class="total-label">Итого</span>
+                    <span class="total-value">${this.formatPrice(Math.round(item.price * item.quantity * 100) / 100)} ₽</span>
                 </div>
-                <button class="cart-item-remove" onclick="cartManager.removeItem(${item.id})">
-                    🗑️
+                <button class="cart-item-remove" onclick="cartManager.removeItem(${item.id})" title="Удалить">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                    </svg>
                 </button>
             </div>
         `).join('');
@@ -161,19 +172,20 @@ class CartManager {
     }
 
     updateCartSummary() {
-        const subtotal = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        const totalSavings = this.cart.reduce((sum, item) => {
+        // Используем Math.round для точных вычислений
+        const subtotal = Math.round(this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 100) / 100;
+        const totalSavings = Math.round(this.cart.reduce((sum, item) => {
             if (item.oldPrice) {
                 return sum + ((item.oldPrice - item.price) * item.quantity);
             }
             return sum;
-        }, 0);
+        }, 0) * 100) / 100;
         const totalItems = this.cart.reduce((sum, item) => sum + item.quantity, 0);
 
         const deliveryOption = document.querySelector('input[name="delivery"]:checked');
         const deliveryCost = deliveryOption ? (parseInt(deliveryOption.dataset.cost || '0', 10) || 0) : 0;
         const deliveryText = deliveryCost === 0 ? 'Бесплатно' : `${this.formatPrice(deliveryCost)} ₽`;
-        const total = subtotal + deliveryCost;
+        const total = Math.round((subtotal + deliveryCost) * 100) / 100;
 
         const totalElement = document.querySelector('.summary-total-amount');
         if (totalElement) {
@@ -235,40 +247,33 @@ class CartManager {
             return;
         }
 
-        // Получаем данные из формы
-        const shippingAddress = document.getElementById('shippingAddress')?.value.trim();
-        const recipientName = document.getElementById('recipientName')?.value.trim();
-        const recipientPhone = document.getElementById('recipientPhone')?.value.trim();
-        const customerNotes = document.getElementById('customerNotes')?.value.trim();
-        const delivery = document.querySelector('input[name="delivery"]:checked')?.value;
-        const payment = document.querySelector('input[name="payment"]:checked')?.value;
+        // Получаем данные из формы, если она есть
+        const addressInput = document.getElementById('shippingAddress');
+        const shippingAddress = addressInput ? addressInput.value.trim() : '';
+        const recipientNameInput = document.getElementById('recipientName');
+        const recipientName = recipientNameInput ? recipientNameInput.value.trim() : '';
+        const recipientPhoneInput = document.getElementById('recipientPhone');
+        const recipientPhone = recipientPhoneInput ? recipientPhoneInput.value.trim() : '';
+        const customerNotes = document.getElementById('customerNotes')?.value.trim() || '';
+        const delivery = document.querySelector('input[name="delivery"]:checked')?.value || 'Стандартная доставка';
+        const payment = document.querySelector('input[name="payment"]:checked')?.value || 'Банковская карта';
 
-        // Валидация
-        if (!shippingAddress) {
+        if (addressInput && !shippingAddress) {
             alert('Пожалуйста, укажите адрес доставки');
             return;
         }
-        if (!recipientName) {
+        if (recipientNameInput && !recipientName) {
             alert('Пожалуйста, укажите имя получателя');
             return;
         }
-        if (!recipientPhone) {
+        if (recipientPhoneInput && !recipientPhone) {
             alert('Пожалуйста, укажите телефон получателя');
-            return;
-        }
-        if (!delivery) {
-            alert('Пожалуйста, выберите способ доставки');
-            return;
-        }
-        if (!payment) {
-            alert('Пожалуйста, выберите способ оплаты');
             return;
         }
 
         try {
             this.showCheckoutLoading(true);
             
-            // Подготавливаем данные заказа
             const selectedDeliveryOption = document.querySelector('input[name="delivery"]:checked');
             const shippingCost = selectedDeliveryOption ? (parseInt(selectedDeliveryOption.dataset.cost || '0', 10) || 0) : 0;
 
@@ -278,11 +283,11 @@ class CartManager {
                     quantity: item.quantity,
                     price: item.price
                 })),
-                shippingAddress: `${shippingAddress}, Получатель: ${recipientName}, Тел: ${recipientPhone}`,
+                shippingAddress: shippingAddress ? `${shippingAddress}${recipientName ? `, Получатель: ${recipientName}` : ''}${recipientPhone ? `, Тел: ${recipientPhone}` : ''}` : '',
                 shippingCost: shippingCost,
                 deliveryMethod: delivery,
                 paymentMethod: payment,
-                customerNotes: `Способ доставки: ${delivery}\nСпособ оплаты: ${payment}${customerNotes ? '\nПримечания: ' + customerNotes : ''}`
+                customerNotes: customerNotes ? customerNotes : ''
             };
 
             // Отправляем заказ на сервер

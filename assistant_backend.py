@@ -1,141 +1,157 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-import os
-from datetime import datetime
 from flask import Flask, request, jsonify
-from flask_cors import CORS
-from openai import OpenAI
-from dotenv import load_dotenv
-
-load_dotenv()
+import os
+import json
+from gigachat import GigaChat
+from gigachat.exceptions import GigaChatException
 
 app = Flask(__name__)
-CORS(app)
 
-# Настройка Gemini API
-GEMINI_API_KEY = 'AIzaSyDdTF83-hG7llh1Uc3veW-LF_Dzt-a9Qnc'
-client = OpenAI(api_key=OPENAI_API_KEY)
+# Конфигурация GigaChat
+GIGACHAT_CREDENTIALS = os.environ.get('GIGACHAT_CREDENTIALS', '')
+GIGACHAT_CA_BUNDLE = os.environ.get('GIGACHAT_CA_BUNDLE_FILE', '')
+GIGACHAT_VERIFY_SSL = os.environ.get('GIGACHAT_VERIFY_SSL_CERTS', 'true').lower() == 'true'
 
-# Контекст для бота
-BOT_CONTEXT = """
-Ты профессиональный AI-ассистент премиум-бренда мебели "Linomello".
+if GIGACHAT_VERIFY_SSL and not GIGACHAT_CA_BUNDLE:
+    print("⚠️  Внимание: GIGACHAT_CA_BUNDLE_FILE не установлена. Используйте GIGACHAT_VERIFY_SSL_CERTS=false для разработки.")
+
+BOT_CONTEXT = """Ты - профессиональный консультант премиум-бренда мебели Linomello.
 
 О компании:
 - Название: Linomello
-- Специализация: мебель ручной работы высокого качества
+- Специализация: элитная мебель ручной работы
 - Материалы: массив дуба, орех, натуральная кожа, итальянские ткани, премиальная фурнитура
 - Срок изготовления: 14-30 дней (зависит от сложности)
 - Доставка: Москва и МО, сборка и установка включены
 - Гарантия: 5 лет на все изделия
-- Цены: От 35,000 ₽ до 500,000 ₽ в зависимости от модели
-- Рассрочка: Доступна (уточняется у менеджера)
+- Цены: От 35,000 ₽ до 500,000 ₽
+- Рассрочка: Доступна
 
-Как отвечать:
+Правила ответа:
 1. Будь вежливым и профессиональным
-2. Дай ПОЛНЫЙ и РАЗВЕРНУТЫЙ ответ (2-3 предложения минимум)
-3. Используй информацию о компании в ответах
+2. Давай ПОЛНЫЙ и РАЗВЕРНУТЫЙ ответ (2-3 предложения минимум)
+3. Используй информацию о компании
 4. Если не знаешь точный ответ - предложи уточнить у менеджера
 5. Говори только на русском языке
-6. Отвечай только на вопросы о мебели, услугах, ценах, доставке, гарантии и оплате
+6. Отвечай только на вопросы о мебели, услугах, ценах, доставке, гарантии
 
-Запомни: Отвечай как реальный консультант, дающий полезную информацию, а не короткие фразы!
-"""
+Примеры ответов:
+- "Доставка осуществляется по Москве и МО. Стоимость рассчитывается индивидуально. Сборка и установка включены."
+- "Мы используем только премиальные материалы - массив дуба и ореха, натуральную кожу и итальянские ткани."
 
+Запомни: Отвечай как профессиональный консультант!"""
 
-class GeminiAssistant:
+def query_gigachat(prompt):
+    """Запрос к GigaChat API"""
+    try:
+        if not GIGACHAT_CREDENTIALS:
+            print("Ошибка: GIGACHAT_CREDENTIALS не установлена")
+            return None
+        
+        client_kwargs = {
+            'credentials': GIGACHAT_CREDENTIALS,
+            'verify_ssl_certs': GIGACHAT_VERIFY_SSL
+        }
+        
+        if GIGACHAT_CA_BUNDLE:
+            client_kwargs['ca_bundle_file'] = GIGACHAT_CA_BUNDLE
+        
+        with GigaChat(**client_kwargs) as client:
+            response = client.chat(prompt)
+            return response.choices[0].message.content
+    
+    except GigaChatException as e:
+        print(f"GigaChat ошибка: {e}")
+        return None
+    except Exception as e:
+        print(f"Ошибка подключения: {e}")
+        return None
+
+class GigaChatAssistant:
     def __init__(self):
-        self.model = 'gpt-4o-mini'
+        self.context = BOT_CONTEXT
     
     def generate_response(self, user_message, page='index.html'):
-        """Генерирует ответ от OpenAI API"""
-        try:
-            response = client.chat.completions.create(
-                model=self.model,
-                messages=[
-                    {"role": "system", "content": BOT_CONTEXT},
-                    {"role": "user", "content": f"Страница: {page}\n\nВопрос: {user_message}"}
-                ],
-                temperature=0.7,
-                max_tokens=500,
-            )
-            
-            response_text = response.choices[0].message.content.strip()
-            if response_text:
-                return response_text, 'openai'
-            
-            return 'Извините, не смог обработать запрос. Пожалуйста, переформулируйте вопрос.', 'openai-error'
+        full_prompt = f"{BOT_CONTEXT}\n\nСтраница: {page}\n\nВопрос: {user_message}"
         
-        except Exception as e:
-            print(f"❌ OpenAI error: {str(e)}")
-            raise Exception(f"AI service error: {str(e)}")
+        response_text = query_gigachat(full_prompt)
+        
+        if response_text:
+            return response_text, 'gigachat'
+        else:
+            return "Извините, сервис ассистента временно недоступен. Попробуйте позже.", 'error'
 
-
-# Инициализируем ассистента
-assistant = GeminiAssistant()
+assistant = GigaChatAssistant()
 
 @app.route('/api/assistant/message', methods=['POST'])
-def send_message():
-    """Обрабатывает сообщение пользователя"""
+def handle_message():
     data = request.get_json()
-    
-    if not data or not data.get('message'):
-        return jsonify({'error': 'Message is required'}), 400
-    
     user_message = data.get('message', '').strip()
     page = data.get('page', 'index.html')
     
     if not user_message:
-        return jsonify({'error': 'Message cannot be empty'}), 400
+        return jsonify({'error': 'Сообщение не может быть пустым'}), 400
     
-    # Генерируем ответ
     response_text, provider = assistant.generate_response(user_message, page)
     
     return jsonify({
         'response': response_text,
+        'suggestions': ['Каталог', 'Цены', 'Доставка', 'Гарантия', 'Контакты'],
         'provider': provider,
-        'timestamp': datetime.utcnow().isoformat(),
-        'suggestions': ['Каталог', 'Цены', 'Доставка', 'Гарантия', 'Контакты']
+        'timestamp': None
     })
 
 @app.route('/api/assistant/status', methods=['GET'])
 def get_status():
-    """Возвращает статус ассистента"""
-    return jsonify({
-        'status': 'online',
-        'provider': 'OpenAI GPT-4o Mini',
-        'version': '2.0',
-        'timestamp': datetime.utcnow().isoformat()
-    })
+    """Проверка статуса GigaChat"""
+    try:
+        if not GIGACHAT_CREDENTIALS:
+            return jsonify({
+                'status': 'offline',
+                'provider': 'GigaChat',
+                'reason': 'Credentials not configured'
+            })
+        
+        client_kwargs = {
+            'credentials': GIGACHAT_CREDENTIALS,
+            'verify_ssl_certs': GIGACHAT_VERIFY_SSL
+        }
+        
+        if GIGACHAT_CA_BUNDLE:
+            client_kwargs['ca_bundle_file'] = GIGACHAT_CA_BUNDLE
+        
+        with GigaChat(**client_kwargs) as client:
+            models = client.get_models()
+            return jsonify({
+                'status': 'online',
+                'provider': 'GigaChat',
+                'model': 'GigaChat',
+                'available_models': [m.id_ for m in models.data] if hasattr(models, 'data') else []
+            })
+    except Exception as e:
+        return jsonify({
+            'status': 'offline',
+            'provider': 'GigaChat',
+            'error': str(e)
+        })
 
 @app.route('/api/assistant/health', methods=['GET'])
 def health_check():
-    """Health check endpoint"""
     return jsonify({
         'status': 'healthy',
-        'service': 'linomello-assistant',
-        'api_key_configured': bool(GEMINI_API_KEY),
-        'timestamp': datetime.utcnow().isoformat()
-    })
-
-@app.route('/', methods=['GET'])
-def index():
-    """Root endpoint"""
-    return jsonify({
-        'service': 'Linomello AI Assistant',
-        'version': '2.0',
-        'status': 'running',
-        'endpoints': {
-            'message': 'POST /api/assistant/message',
-            'status': 'GET /api/assistant/status',
-            'health': 'GET /api/assistant/health'
-        }
+        'service': 'linomello-gigachat',
+        'provider': 'GigaChat',
+        'sdk': 'python-gigachat'
     })
 
 if __name__ == '__main__':
-    print('\n' + '='*50)
-    print('🤖 Linomello AI Assistant (Python) запущен!')
-    print('📍 Адрес: http://localhost:3001')
-    print('🔌 Provider: Google Gemini 2.0 Flash')
-    print('='*50 + '\n')
-    app.run(debug=False, host='0.0.0.0', port=3001)
+    print('🤖 Linomello GigaChat Assistant запущен!')
+    print('   Провайдер: GigaChat')
+    if GIGACHAT_CREDENTIALS:
+        print('   Статус: ✅ Готов')
+    else:
+        print('   Статус: ⚠️  Требуется GIGACHAT_CREDENTIALS')
+    print('   Эндпоинты:')
+    print('   - POST /api/assistant/message')
+    print('   - GET /api/assistant/status')
+    print('   - GET /api/assistant/health')
+    app.run(host='0.0.0.0', port=5001, debug=True)

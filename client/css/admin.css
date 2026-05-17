@@ -3,14 +3,14 @@
    ======================================== */
 
 :root {
-    --primary-color: #1f5a31;
-    --secondary-color: #7fcc75;
-    --accent-color: #d8f1d3;
-    --text-dark: #1d4228;
-    --text-light: #5b7f58;
-    --background-light: #f8fbf6;
+    --primary-color: #5a3e20;
+    --secondary-color: #b37c3d;
+    --accent-color: #f3e2c0;
+    --text-dark: #2e1f16;
+    --text-light: #7a5d45;
+    --background-light: #f7f1ea;
     --white: #ffffff;
-    --border-color: #dbead9;
+    --border-color: #e4d6c8;
 }
 
 /* Body Styles */
@@ -265,7 +265,7 @@ body {
 
 .order-status.production {
     background: #d8f1d3;
-    color: #1f5a31;
+    color: var(--primary-color);
 }
 
 .order-status.ready {

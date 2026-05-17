@@ -97,6 +97,17 @@ CREATE TABLE reviews (
     FOREIGN KEY (product_id) REFERENCES products(id)
 );
 
+-- Избранное
+CREATE TABLE wishlist (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    product_id INTEGER NOT NULL,
+    added_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (product_id) REFERENCES products(id),
+    UNIQUE(user_id, product_id)
+);
+
 -- Индексы для ускорения поиска
 CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_products_category ON products(category_id);
@@ -104,3 +115,5 @@ CREATE INDEX idx_products_collection ON products(collection_id);
 CREATE INDEX idx_orders_user ON orders(user_id);
 CREATE INDEX idx_orders_status ON orders(status);
 CREATE INDEX idx_reviews_product ON reviews(product_id);
+CREATE INDEX idx_wishlist_user ON wishlist(user_id);
+CREATE INDEX idx_wishlist_product ON wishlist(product_id);

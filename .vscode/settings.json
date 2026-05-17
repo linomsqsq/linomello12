@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^Get-ChildItem -Path \"client\" -Filter \"\\*\\.html\" -Recurse \\| ForEach-Object \\{ \\(Get-Content \\$_\\.FullName -Raw\\) -replace 'chatbot\\\\\\.js', 'assistant\\.js' \\| Set-Content \\$_\\.FullName -NoNewline \\}$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}
